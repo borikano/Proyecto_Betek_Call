@@ -1,43 +1,62 @@
 # Proyecto Betek Call
 
-Repositorio de datos sintéticos y carga a PostgreSQL para un escenario de analítica de call center.
+Repositorio de datos sintéticos para un escenario de analítica de call center con carga a PostgreSQL.
 
-## Resumen
+## Propósito
 
-Este proyecto contiene un paquete de datos generados para modelar una operación de centro de contacto con entidades como clientes, agentes, llamadas, casos, facturas, pagos y encuestas de satisfacción.
+Este proyecto fue preparado para practicar y demostrar:
 
-El repositorio está pensado para:
+- modelado relacional aplicado a una operación de contact center;
+- carga reproducible de datos en PostgreSQL;
+- validación básica de calidad e integridad;
+- análisis exploratorio, SQL y BI sobre un dataset consistente.
 
-- poblar una base de datos PostgreSQL con datos relacionales consistentes;
-- validar integridad básica y conteos por tabla;
-- servir como base para prácticas de SQL, BI y analítica.
+## Lo Que Incluye
 
-## Contenido
+El repositorio contiene dos entregables:
 
-El proyecto incluye dos conjuntos principales:
+- `call_center_analytics_20260410/`: dataset principal.
+- `_smoke_test_call_center/`: versión reducida para pruebas rápidas.
 
-- `call_center_analytics_20260410/`: conjunto principal de datos.
-- `_smoke_test_call_center/`: conjunto reducido para pruebas rápidas.
+Cada conjunto incluye:
 
-Cada carpeta contiene:
-
-- archivos `.csv` con los datos por tabla;
-- `load_call_center_postgresql.sql` para cargar la información en PostgreSQL;
-- `quality_report.json` con validaciones de consistencia;
+- archivos `.csv` por tabla;
+- `load_call_center_postgresql.sql` para poblar el esquema `call_center_analytics`;
+- `quality_report.json` con validaciones;
 - `generation_log.json` con metadatos de generación;
-- `row_counts.csv` con el resumen de filas por tabla.
+- `row_counts.csv` con conteos de filas.
 
-## Estructura
+## Modelo De Datos
 
-- `agentes.csv`, `clientes.csv`, `casos.csv`, `llamadas.csv`, `facturas.csv`, `pagos.csv`: tablas principales del modelo.
-- `departamentos.csv`, `equipos_trabajo.csv`, `habilidades.csv`, `turnos.csv`, `tipos_servicio.csv`, `resultados_llamada.csv`: tablas de catálogo y soporte.
-- `agente_habilidad.csv`, `agente_turno.csv`, `motivos_llamada.csv`, `productos_servicios_cliente.csv`, `encuestas_satisfaccion.csv`: relaciones y hechos asociados.
+Entidades principales:
 
-## Origen de los datos
+- `clientes`
+- `agentes`
+- `casos`
+- `llamadas`
+- `facturas`
+- `pagos`
 
-Los archivos fueron generados de forma sintética a partir de reglas de negocio y un seed reproducible.
+Tablas de soporte y catálogo:
 
-Datos relevantes del conjunto principal:
+- `departamentos`
+- `equipos_trabajo`
+- `habilidades`
+- `turnos`
+- `tipos_servicio`
+- `resultados_llamada`
+
+Relaciones y tablas derivadas:
+
+- `agente_habilidad`
+- `agente_turno`
+- `motivos_llamada`
+- `productos_servicios_cliente`
+- `encuestas_satisfaccion`
+
+## Datos Y Calidad
+
+El conjunto principal fue generado con estos metadatos:
 
 - `seed`: `20260410`
 - `generator_version`: `1.0.0`
@@ -46,45 +65,60 @@ Datos relevantes del conjunto principal:
 - `history_end_date`: `2026-04-11`
 - `generated_at`: `2026-04-11T00:15:23`
 
-## Carga en PostgreSQL
+El reporte de calidad valida:
 
-El script `load_call_center_postgresql.sql` realiza estas acciones:
+- unicidad de claves primarias;
+- integridad referencial en las relaciones verificadas;
+- ausencia de registros inválidos en los controles aplicados.
 
-1. limpia las tablas destino con `TRUNCATE`;
-2. crea tablas temporales de staging;
-3. carga los CSV con `\copy`;
-4. inserta los datos en el esquema `call_center_analytics`;
-5. reajusta secuencias con `setval`.
+## Estructura Recomendada Del Repo
+
+- `README.md`: guía principal del proyecto.
+- `.gitignore`: exclusiones del entorno local y artefactos del sistema.
+- `call_center_analytics_20260410/`: dataset listo para carga productiva.
+- `_smoke_test_call_center/`: dataset pequeño para pruebas.
+
+## Cómo Cargar Los Datos
+
+El script de carga ejecuta el siguiente flujo:
+
+1. `TRUNCATE` de tablas destino.
+2. Creación de tablas temporales de staging.
+3. Carga de CSV con `\copy`.
+4. Inserción en el esquema `call_center_analytics`.
+5. Ajuste de secuencias con `setval`.
 
 ### Requisitos
 
-- PostgreSQL accesible con el esquema `call_center_analytics` ya creado.
-- Permisos para ejecutar `TRUNCATE`, `COPY` y `INSERT`.
-
-### Importante
-
-El loader usa rutas absolutas de Windows. Si mueves el repositorio de carpeta o lo clonas en otra ruta, debes actualizar las rutas dentro del SQL antes de ejecutarlo.
+- PostgreSQL disponible.
+- Esquema `call_center_analytics` creado previamente.
+- Permisos para `TRUNCATE`, `COPY` e `INSERT`.
 
 ### Ejecución
+
+Ejecuta el comando desde la raíz del repositorio:
 
 ```bash
 psql -d <tu_base_de_datos> -f call_center_analytics_20260410/load_call_center_postgresql.sql
 ```
 
-## Calidad de datos
+Para pruebas rápidas:
 
-El archivo `quality_report.json` del conjunto principal reporta validaciones exitosas, incluyendo:
+```bash
+psql -d <tu_base_de_datos> -f _smoke_test_call_center/load_call_center_postgresql.sql
+```
 
-- unicidad de claves primarias;
-- integridad referencial básica;
-- ausencia de registros inválidos en las relaciones verificadas.
+## Buenas Prácticas Aplicadas
 
-## Recomendaciones
+- Entornos locales excluidos con `.gitignore`.
+- Dataset principal y smoke test separados.
+- Documentación de origen, propósito y validación.
+- Carga basada en archivos versionados dentro del repositorio.
 
-- Mantener fuera del control de versiones los entornos virtuales y artefactos del sistema operativo.
-- Conservar los conjuntos principal y de smoke test separados para facilitar pruebas.
-- Si regeneras datos, documenta el nuevo `seed` y la fecha de generación.
+## Nota Sobre Portabilidad
+
+Los loaders usan rutas relativas al repositorio. Eso hace que el proyecto sea más fácil de clonar y ejecutar en otra máquina, siempre que se lance el script desde la raíz del repo.
 
 ## Licencia
 
-No se ha definido una licencia en este repositorio. Si vas a publicarlo de forma abierta, conviene añadir una antes de compartirlo.
+No se ha definido una licencia aún. Si el repositorio se va a compartir públicamente, conviene añadir una antes de ampliar su difusión.
