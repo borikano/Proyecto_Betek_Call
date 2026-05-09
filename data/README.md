@@ -78,5 +78,5 @@ El dataset ampliado fue generado con:
 
 Ejemplo para dataset ampliado:
 
-    psql -d <tu_base_de_datos> -f data/call_center_analytics_20260526_125k/load_call_center_postgresql.sql
+    psql -d <tu_base_de_datos> -f .\call_center_analytics_20260526_125k\load_call_center_postgresql.sql
 
