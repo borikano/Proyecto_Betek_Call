@@ -9,11 +9,16 @@ Produce un CSV por tabla, más reportes de calidad y trazabilidad.
 Uso ejemplo:
 python 07_generador_datos_sinteticos_python.py --output-dir ./salida
 
-Para pruebas pequeñas:
+Para pruebas pequenas:
 python 07_generador_datos_sinteticos_python.py \
   --output-dir ./salida_prueba \
   --clients 500 --agents 30 --history-months 2 \
-  --calls-target-min 2000 --calls-target-max 2500
+  --products-target-min 700 --products-target-max 900 \
+  --invoices-target-min 900 --invoices-target-max 1200 \
+  --payments-target-min 700 --payments-target-max 1000 \
+  --cases-target-min 500 --cases-target-max 700 \
+  --calls-target-min 2000 --calls-target-max 2500 \
+  --surveys-target-min 400 --surveys-target-max 600
 """
 
 from __future__ import annotations
@@ -152,6 +157,7 @@ class SyntheticCallCenterGenerator:
             raise ValueError("start_date no puede ser mayor que end_date")
         self.tables: Dict[str, pd.DataFrame] = {}
         self._maybe_scale_targets()
+        self._validate_config()
 
         self.first_names = np.array([
             "Andres","Camilo","Daniel","David","Felipe","Jorge","Juan","Julian","Luis","Mateo",
@@ -199,6 +205,31 @@ class SyntheticCallCenterGenerator:
             if current == getattr(defaults, field) and ratio < 1.0:
                 setattr(self.config, field, max(floor, int(round(current * ratio))))
 
+    def _validate_config(self) -> None:
+        if self.config.clients <= 0:
+            raise ValueError("--clients debe ser mayor que 0")
+        if self.config.agents <= 0:
+            raise ValueError("--agents debe ser mayor que 0")
+
+        target_pairs = [
+            ("surveys", self.config.surveys_target_min, self.config.surveys_target_max),
+            ("calls", self.config.calls_target_min, self.config.calls_target_max),
+            ("invoices", self.config.invoices_target_min, self.config.invoices_target_max),
+            ("cases", self.config.cases_target_min, self.config.cases_target_max),
+            ("products", self.config.products_target_min, self.config.products_target_max),
+            ("payments", self.config.payments_target_min, self.config.payments_target_max),
+        ]
+        for name, minimum, maximum in target_pairs:
+            if minimum < 0 or maximum < 0:
+                raise ValueError(f"Los targets de {name} no pueden ser negativos")
+            if minimum > maximum:
+                raise ValueError(f"El target minimo de {name} no puede superar el maximo")
+
+        if self.config.products_target_min < self.config.clients:
+            raise ValueError("products_target_min no puede ser menor que clients")
+        if self.config.products_target_max > self.config.clients * 4:
+            raise ValueError("products_target_max no puede superar clients * 4")
+
     def _choice(self, values, probs, size):
         probs = np.array(probs, dtype=float)
         probs /= probs.sum()
@@ -209,6 +240,9 @@ class SyntheticCallCenterGenerator:
             return value
         normalized = unicodedata.normalize("NFKD", str(value))
         return normalized.encode("ascii", "ignore").decode("ascii")
+
+    def _colombian_mobile_numbers(self, size: int) -> List[str]:
+        return [f"3{int(x):09d}" for x in self.rng.integers(0, 1_000_000_000, size=size)]
 
     def _random_dates(self, start: date, end: date, size: int) -> List[date]:
         total_days = max(1, (end - start).days)
@@ -351,7 +385,7 @@ class SyntheticCallCenterGenerator:
             "apellido": last,
             "direccion": [f"Calle {int(a)} #{int(b)}-{int(c)}" for a,b,c in self.rng.integers(1,120,size=(n,3))],
             "ciudad": cities,
-            "telefono": [f"3{int(x):07d}" for x in self.rng.integers(1000000,9999999,size=n)],
+            "telefono": self._colombian_mobile_numbers(n),
             "email": emails,
             "fecha_registro": pd.to_datetime(dates).date,
             "estado_cliente": estados,
@@ -388,7 +422,7 @@ class SyntheticCallCenterGenerator:
         fecha_ingreso = self._random_dates(self.start_date - timedelta(days=1500), self.end_date - timedelta(days=1), n)
         perfiles = self._choice(["alto_fcr","alto_volumen","comercial","novato","balanceado"], [0.18,0.18,0.16,0.12,0.36], size=n)
         cargo = np.where(np.isin(depts, [3,4]), "asesor_comercial", "asesor_servicio")
-        estados = self._choice(["activo","activo","activo","activo","vacaciones","inactivo"], [1,1,1,1,1,1], size=n)
+        estados = self._choice(["activo","vacaciones","inactivo"], [0.67,0.17,0.16], size=n)
 
         agentes = pd.DataFrame({
             "id_agente": np.arange(1, n+1),
@@ -396,7 +430,7 @@ class SyntheticCallCenterGenerator:
             "apellido": last,
             "documento": docs,
             "cargo": cargo,
-            "telefono": [f"3{int(x):07d}" for x in self.rng.integers(1000000,9999999,size=n)],
+            "telefono": self._colombian_mobile_numbers(n),
             "email": [f"agente{i}@empresa.com" for i in range(1, n+1)],
             "fecha_ingreso": pd.to_datetime(fecha_ingreso).date,
             "estado_agente": estados,
@@ -496,7 +530,6 @@ class SyntheticCallCenterGenerator:
         productos = self.tables["productos_servicios_cliente"]
         eligible = productos[productos["estado_producto"].isin(["activo","suspendido"])].copy()
         target = int(self.rng.integers(self.config.invoices_target_min, self.config.invoices_target_max + 1))
-        months = pd.period_range(self.start_date, self.end_date, freq="M")
         inv_rows, pay_rows = [], []
         iid, pid = 1, 1
 
