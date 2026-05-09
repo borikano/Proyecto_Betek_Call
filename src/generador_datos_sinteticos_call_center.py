@@ -116,6 +116,7 @@ class GenerationConfig:
     seed: int = 20260410
     output_dir: str = "./output_call_center"
     history_months: int = 6
+    start_date: Optional[str] = None
     end_date: str = date.today().isoformat()
 
     clients: int = 30000
@@ -142,7 +143,12 @@ class SyntheticCallCenterGenerator:
         self.output_dir = Path(config.output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.end_date = datetime.strptime(config.end_date, "%Y-%m-%d").date()
-        self.start_date = self.end_date - timedelta(days=30 * config.history_months)
+        if config.start_date:
+            self.start_date = datetime.strptime(config.start_date, "%Y-%m-%d").date()
+        else:
+            self.start_date = self.end_date - timedelta(days=30 * config.history_months)
+        if self.start_date > self.end_date:
+            raise ValueError("start_date no puede ser mayor que end_date")
         self.tables: Dict[str, pd.DataFrame] = {}
         self._maybe_scale_targets()
 
@@ -977,6 +983,7 @@ def parse_args() -> GenerationConfig:
     p.add_argument("--output-dir", default="./output_call_center")
     p.add_argument("--seed", type=int, default=20260410)
     p.add_argument("--history-months", type=int, default=6)
+    p.add_argument("--start-date", default=None)
     p.add_argument("--end-date", default=date.today().isoformat())
     p.add_argument("--clients", type=int, default=30000)
     p.add_argument("--agents", type=int, default=180)
@@ -994,7 +1001,7 @@ def parse_args() -> GenerationConfig:
     p.add_argument("--payments-target-max", type=int, default=100000)
     a = p.parse_args()
     return GenerationConfig(
-        seed=a.seed, output_dir=a.output_dir, history_months=a.history_months, end_date=a.end_date,
+        seed=a.seed, output_dir=a.output_dir, history_months=a.history_months, start_date=a.start_date, end_date=a.end_date,
         clients=a.clients, agents=a.agents,
         surveys_target_min=a.surveys_target_min, surveys_target_max=a.surveys_target_max,
         calls_target_min=a.calls_target_min, calls_target_max=a.calls_target_max,
