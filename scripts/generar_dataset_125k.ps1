@@ -1,0 +1,19 @@
+python .\src\generador_datos_sinteticos_call_center.py `
+  --output-dir .\data\call_center_analytics_20260526_125k `
+  --seed 20260526 `
+  --start-date 2025-06-01 `
+  --end-date 2026-05-26 `
+  --clients 125000 `
+  --agents 750 `
+  --products-target-min 175000 `
+  --products-target-max 225000 `
+  --invoices-target-min 850000 `
+  --invoices-target-max 1100000 `
+  --payments-target-min 650000 `
+  --payments-target-max 950000 `
+  --cases-target-min 120000 `
+  --cases-target-max 170000 `
+  --calls-target-min 550000 `
+  --calls-target-max 750000 `
+  --surveys-target-min 100000 `
+  --surveys-target-max 160000
