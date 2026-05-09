@@ -123,7 +123,7 @@ El script de generacion del dataset ampliado se encuentra en:
 
     scripts/generar_dataset_125k.ps1
 
-Ejecutar desde la raiz del repositorio:
+Ejecutar desde la carpeta `data/` del repositorio:
 
     .\scripts\generar_dataset_125k.ps1
 
@@ -184,17 +184,17 @@ El script de carga ejecuta el siguiente flujo:
 
 ### Cargar Dataset 125k
 
-Ejecutar desde la raiz del repositorio:
+Ejecutar desde la carpeta `data/` del repositorio:
 
-    psql -d <tu_base_de_datos> -f data/call_center_analytics_20260526_125k/load_call_center_postgresql.sql
+    psql -d <tu_base_de_datos> -f .\call_center_analytics_20260526_125k\load_call_center_postgresql.sql
 
 ### Cargar Dataset Base
 
-    psql -d <tu_base_de_datos> -f data/call_center_analytics_20260410/load_call_center_postgresql.sql
+    psql -d <tu_base_de_datos> -f .\call_center_analytics_20260410\load_call_center_postgresql.sql
 
 ### Cargar Dataset De Prueba
 
-    psql -d <tu_base_de_datos> -f data/_smoke_test_call_center/load_call_center_postgresql.sql
+    psql -d <tu_base_de_datos> -f .\_smoke_test_call_center\load_call_center_postgresql.sql
 
 ## Entorno Python
 
