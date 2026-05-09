@@ -242,3 +242,56 @@ Los loaders usan rutas relativas al repositorio. Esto permite clonar el proyecto
 5. Conectar Power BI al modelo relacional.
 6. Construir modelo semantico, medidas DAX y dashboards.
 
+
+<!-- estado-postgresql-125k-inicio -->
+## Estado Actual: PostgreSQL y Dataset 125k
+
+El proyecto ya cuenta con el dataset ampliado cargado y validado en PostgreSQL.
+
+Versión de referencia:
+
+```text
+v1.0.0-125k
+```
+
+Componentes principales de esta fase:
+
+- Dataset ampliado de 125.000 clientes en `data/call_center_analytics_20260526_125k/`.
+- Carga exitosa en PostgreSQL sobre la base `betek_call_analytics`.
+- Validaciones técnicas versionadas en `sql/07_validaciones_postgresql_dataset_125k.sql`.
+- Corrección de correos duplicados en clientes para cumplir la restricción única por `lower(email)`.
+- Confirmación de conteos principales, rango histórico, cobertura diaria e integridad básica.
+- Documentación de trazabilidad en `docs/guia_versionamiento.md`.
+
+Conteos principales validados en PostgreSQL:
+
+```text
+clientes                  125000
+agentes                   750
+casos                     122211
+llamadas                  628679
+facturas                  1039992
+pagos                     778227
+encuestas_satisfaccion    144356
+```
+
+Preguntas de negocio pendientes de responder inicialmente en SQL:
+
+1. ¿Cuáles son los motivos de llamadas más frecuentes?
+2. ¿Cuántas llamadas entrantes y salientes se registran por mes?
+3. ¿Cuáles son los motivos de llamadas más frecuentes y cuál es el tiempo promedio de atención para cada solicitud?
+4. ¿En qué franjas horarias y días de la semana se concentra la mayor cantidad de llamadas?
+5. ¿Cuántos clientes realizaron múltiples llamadas por un mismo caso por mes, debido a que no fue resuelto en el primer contacto?
+6. ¿Qué agentes presentan mayor desempeño según cantidad de llamadas atendidas, tiempo promedio de atención y satisfacción del cliente?
+7. ¿Qué clientes presentan facturas vencidas o pagos pendientes?
+8. ¿Qué departamento presenta mayor tiempo promedio de atención o menor tasa de resolución?
+9. ¿Cuál es el nivel de satisfacción del cliente después de la atención y cómo varía según el agente o el tipo de servicio?
+
+Archivo recomendado para la siguiente fase:
+
+```text
+sql/08_preguntas_negocio_dataset_125k.sql
+```
+
+Power BI queda como fase posterior, una vez las respuestas SQL estén validadas.
+<!-- estado-postgresql-125k-fin -->
