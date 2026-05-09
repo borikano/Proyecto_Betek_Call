@@ -1,0 +1,4 @@
+id_turno,nombre_turno,hora_inicio,hora_fin,dias_semana
+1,manana,06:00:00,14:00:00,lun-dom
+2,tarde,14:00:00,22:00:00,lun-dom
+3,noche,22:00:00,06:00:00,lun-dom
