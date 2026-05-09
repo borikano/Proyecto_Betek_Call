@@ -1,49 +1,69 @@
 # Proyecto Betek Call Center Analytics
 
-Repositorio de datos sintéticos para un escenario de analítica de call center con carga a PostgreSQL, análisis en Python y visualización en Power BI.
+Repositorio de datos sinteticos para un escenario de analitica de call center con carga a PostgreSQL, analisis en Python y visualizacion en Power BI.
 
-## Propósito
+## Estado Actual
+
+Version de referencia del proyecto:
+
+    v1.0.0-125k
+
+Esta version incluye:
+
+- estructura reorganizada del repositorio;
+- generador Python unificado;
+- dataset base inicial;
+- dataset ampliado de 125.000 clientes;
+- rango historico desde `2025-06-01` hasta `2026-05-26`;
+- validaciones reforzadas de calidad;
+- reglas operativas por tipo de servicio;
+- script reproducible para generar el dataset ampliado;
+- documentacion preparada para VSCode, GitHub, PostgreSQL y Power BI.
+
+## Proposito
 
 Este proyecto fue preparado para practicar y demostrar:
 
-- modelado relacional aplicado a una operación de contact center;
-- generación reproducible de datos sintéticos;
+- modelado relacional aplicado a una operacion de contact center;
+- generacion reproducible de datos sinteticos;
 - carga de datos en PostgreSQL;
-- validación de calidad e integridad;
-- análisis exploratorio con SQL, Python y BI;
-- construcción de indicadores sobre llamadas, casos, clientes, agentes, facturación, pagos y satisfacción.
+- validacion de calidad e integridad;
+- analisis exploratorio con SQL, Python y BI;
+- construccion de indicadores sobre llamadas, casos, clientes, agentes, facturacion, pagos y satisfaccion.
 
 ## Estructura Del Proyecto
 
 La estructura actual del repositorio es:
 
     PROYECTO_MAESTRO/
+    ├─ data/
+    │  ├─ README.md
+    │  ├─ _smoke_test_call_center/
+    │  ├─ call_center_analytics_20260410/
+    │  └─ call_center_analytics_20260526_125k/
     ├─ docs/
     │  ├─ Documentos_Maestros/
     │  └─ 07_guia_generador_datos.md
+    ├─ scripts/
+    │  └─ generar_dataset_125k.ps1
     ├─ sql/
     │  └─ 06_ddl_sql_creacion_tablas.sql
     ├─ src/
-    │  ├─ generador_datos_sinteticos_call_center.py
-    │  └─ generador_datos_sinteticos_call_center_125k.py
-    ├─ data/
-    │  ├─ _smoke_test_call_center/
-    │  └─ call_center_analytics_20260410/
-    ├─ scripts/
+    │  └─ generador_datos_sinteticos_call_center.py
     ├─ tests/
+    ├─ README.md
     ├─ requirements.txt
     ├─ .gitignore
-    ├─ .gitattributes
-    └─ README.md
+    └─ .gitattributes
 
 ## Carpetas Principales
 
-- `docs/`: documentación funcional, técnica y guía del generador.
-- `sql/`: DDL oficial de creación de tablas en PostgreSQL.
-- `src/`: código Python del generador de datos sintéticos.
 - `data/`: datasets generados y dataset reducido de prueba.
-- `scripts/`: comandos auxiliares para generación de datasets.
-- `tests/`: espacio reservado para pruebas automáticas y validaciones futuras.
+- `docs/`: documentacion funcional, tecnica y guia del generador.
+- `scripts/`: comandos auxiliares para generacion de datasets.
+- `sql/`: DDL oficial de creacion de tablas en PostgreSQL.
+- `src/`: codigo Python del generador de datos sinteticos.
+- `tests/`: espacio reservado para pruebas automaticas y validaciones futuras.
 
 ## Modelo De Datos
 
@@ -62,7 +82,7 @@ Entidades principales:
 - `facturas`
 - `pagos`
 
-Tablas de soporte y catálogo:
+Tablas de soporte y catalogo:
 
 - `departamentos`
 - `equipos_trabajo`
@@ -97,154 +117,23 @@ El generador produce:
 - `generation_log.json`;
 - `row_counts.csv`.
 
-## Dataset Base
+## Script Dataset 125k
 
-El dataset base versionado se encuentra en:
+El script de generacion del dataset ampliado se encuentra en:
 
-    data/call_center_analytics_20260410/
+    scripts/generar_dataset_125k.ps1
 
-Metadatos principales:
+Ejecutar desde la raiz del repositorio:
 
-- `seed`: `20260410`
-- `generator_version`: `1.0.0`
-- `business_rules_version`: `1.0.0`
-- `history_start_date`: `2025-10-13`
-- `history_end_date`: `2026-04-11`
-- `generated_at`: `2026-04-11T00:15:23`
-
-## Dataset De Prueba
-
-El dataset reducido para pruebas rápidas se encuentra en:
-
-    data/_smoke_test_call_center/
-
-Sirve para validar carga, estructura y consultas sin usar el dataset completo.
-
-## Cómo Cargar Los Datos En PostgreSQL
-
-El script de carga ejecuta el siguiente flujo:
-
-1. `TRUNCATE` de tablas destino.
-2. Creación de tablas temporales de staging.
-3. Carga de CSV con `\copy`.
-4. Inserción en el esquema `call_center_analytics`.
-5. Ajuste de secuencias con `setval`.
-
-### Requisitos
-
-- PostgreSQL 15+.
-- Esquema `call_center_analytics` creado previamente.
-- Permisos para `TRUNCATE`, `COPY` e `INSERT`.
-
-### Cargar Dataset Base
-
-Ejecutar desde la raíz del repositorio:
-
-    psql -d <tu_base_de_datos> -f data/call_center_analytics_20260410/load_call_center_postgresql.sql
-
-### Cargar Dataset De Prueba
-
-    psql -d <tu_base_de_datos> -f data/_smoke_test_call_center/load_call_center_postgresql.sql
-
-## Entorno Python
-
-Crear entorno virtual:
-
-    python -m venv .venv
-    .\.venv\Scripts\Activate.ps1
-
-Instalar dependencias:
-
-    pip install -r requirements.txt
-
-Dependencias principales:
-
-- NumPy
-- Pandas
-
-## Buenas Prácticas Del Repositorio
-
-El repositorio excluye:
-
-- entornos virtuales `.venv/`;
-- archivos `__pycache__/`;
-- archivos `desktop.ini`;
-- archivos temporales;
-- archivos `.fixed.csv*`;
-- artefactos locales del sistema operativo.
-
-La configuración está definida en:
-
-- `.gitignore`
-- `.gitattributes`
-- `requirements.txt`
-
-## Dataset Ampliado 125k
-
-El dataset ampliado se encuentra en:
-
-    data/call_center_analytics_20260526_125k/
-
-Caracteristicas principales:
-
-- 125.000 clientes.
-- Trazabilidad desde `2025-06-01` hasta `2026-05-26`.
-- Datos diarios para analisis en Power BI.
-- Reglas horarias por tipo de servicio.
-- Validaciones reforzadas de calidad.
-- Textos exportados sin acentos ni `ñ` para mejorar compatibilidad con Excel, PostgreSQL y Power BI.
-
-Conteos principales:
-
-- `clientes`: 125000
-- `agentes`: 750
-- `llamadas`: 628679
-- `casos`: 122211
-- `facturas`: 1039992
-- `pagos`: 778227
-- `encuestas_satisfaccion`: 144356
-
-Validaciones realizadas:
-
-- Sin validaciones fallidas en `quality_report.json`.
-- Sin archivos mayores a 95 MB.
-- Sin acentos ni `ñ` en los CSV exportados.
-- Rango historico confirmado: `2025-06-01` a `2026-05-26`.
-
-## Reglas Operativas Objetivo
-
-Para la generación ampliada se consideran las siguientes reglas:
-
-- Ventas y telemarketing: lunes a sábado, de 09:00 a 19:00.
-- Soporte técnico: operación 24/7.
-- Atención al cliente: todos los días, de 07:00 a 21:00.
-- Facturación: lunes a sábado, en horario operativo definido para el proyecto.
-
-## Nota Sobre Portabilidad
-
-Los loaders usan rutas relativas al repositorio. Esto permite clonar el proyecto y ejecutar los scripts desde otra máquina, siempre que se lancen desde la raíz del repositorio.
-
-## Estado Actual y Siguientes Pasos
-
-Version de referencia del proyecto:
-
-    v1.0.0-125k
-
-Esta version incluye:
-
-- estructura reorganizada del repositorio;
-- generador Python unificado;
-- dataset base inicial;
-- dataset ampliado de 125.000 clientes;
-- rango historico desde `2025-06-01` hasta `2026-05-26`;
-- validaciones reforzadas de calidad;
-- reglas operativas por tipo de servicio;
-- script reproducible para generar el dataset ampliado;
-- documentacion actualizada para trabajo en VSCode, GitHub, PostgreSQL y Power BI.
+    .\scripts\generar_dataset_125k.ps1
 
 ## Datasets Disponibles
 
-El repositorio contiene tres conjuntos principales:
+El detalle de los datasets se encuentra en:
+
+    data/README.md
+
+Resumen:
 
 - `data/_smoke_test_call_center/`: dataset reducido para pruebas rapidas.
 - `data/call_center_analytics_20260410/`: dataset base inicial.
@@ -276,6 +165,73 @@ Validaciones realizadas:
 - Soporte tecnico: operacion 24/7.
 - Atencion al cliente: todos los dias, de 07:00 a 21:00.
 - Facturacion: lunes a sabado, en horario operativo definido para el proyecto.
+
+## Como Cargar Los Datos En PostgreSQL
+
+El script de carga ejecuta el siguiente flujo:
+
+1. `TRUNCATE` de tablas destino.
+2. Creacion de tablas temporales de staging.
+3. Carga de CSV con `\copy`.
+4. Insercion en el esquema `call_center_analytics`.
+5. Ajuste de secuencias con `setval`.
+
+### Requisitos
+
+- PostgreSQL 15+.
+- Esquema `call_center_analytics` creado previamente.
+- Permisos para `TRUNCATE`, `COPY` e `INSERT`.
+
+### Cargar Dataset 125k
+
+Ejecutar desde la raiz del repositorio:
+
+    psql -d <tu_base_de_datos> -f data/call_center_analytics_20260526_125k/load_call_center_postgresql.sql
+
+### Cargar Dataset Base
+
+    psql -d <tu_base_de_datos> -f data/call_center_analytics_20260410/load_call_center_postgresql.sql
+
+### Cargar Dataset De Prueba
+
+    psql -d <tu_base_de_datos> -f data/_smoke_test_call_center/load_call_center_postgresql.sql
+
+## Entorno Python
+
+Crear entorno virtual:
+
+    python -m venv .venv
+    .\.venv\Scripts\Activate.ps1
+
+Instalar dependencias:
+
+    pip install -r requirements.txt
+
+Dependencias principales:
+
+- NumPy
+- Pandas
+
+## Buenas Practicas Del Repositorio
+
+El repositorio excluye:
+
+- entornos virtuales `.venv/`;
+- archivos `__pycache__/`;
+- archivos `desktop.ini`;
+- archivos temporales;
+- archivos `.fixed.csv*`;
+- artefactos locales del sistema operativo.
+
+La configuracion esta definida en:
+
+- `.gitignore`
+- `.gitattributes`
+- `requirements.txt`
+
+## Nota Sobre Portabilidad
+
+Los loaders usan rutas relativas al repositorio. Esto permite clonar el proyecto y ejecutar los scripts desde otra maquina, siempre que se lancen desde la raiz del repositorio.
 
 ## Proximas Fases
 
