@@ -1,0 +1,123 @@
+id_caso,id_cliente,id_tipo_servicio,id_motivo,descripcion_caso,fecha_apertura,fecha_cierre,estado_caso,resuelto_primer_contacto,prioridad
+1,196,5,15,Caso 1 asociado a motivo 15,2026-03-19 13:28:00,2026-03-23 13:28:00,cerrado,0,alta
+2,200,2,4,Caso 2 asociado a motivo 4,2026-03-29 17:21:58,2026-04-13 17:21:58,cerrado,1,baja
+3,113,1,2,Caso 3 asociado a motivo 2,2026-04-03 08:48:01,,en_proceso,0,baja
+4,123,5,14,Caso 4 asociado a motivo 14,2026-02-25 17:57:52,2026-03-08 01:57:52,cerrado,1,baja
+5,32,1,1,Caso 5 asociado a motivo 1,2026-03-16 18:32:00,2026-03-21 04:32:00,cerrado,0,media
+6,106,5,15,Caso 6 asociado a motivo 15,2026-03-30 09:33:17,2026-04-15 14:33:17,cerrado,1,baja
+7,130,2,5,Caso 7 asociado a motivo 5,2026-04-02 11:01:39,,en_proceso,0,baja
+8,63,5,14,Caso 8 asociado a motivo 14,2026-02-19 10:09:08,2026-03-10 19:09:08,cerrado,0,media
+9,120,5,14,Caso 9 asociado a motivo 14,2026-02-27 17:36:54,2026-03-19 20:36:54,cerrado,1,baja
+10,49,1,1,Caso 10 asociado a motivo 1,2026-03-19 06:47:51,2026-03-20 12:47:51,cerrado,1,media
+11,155,2,5,Caso 11 asociado a motivo 5,2026-04-08 16:36:30,,en_proceso,0,media
+12,91,2,5,Caso 12 asociado a motivo 5,2026-03-02 17:28:48,2026-03-04 18:28:48,cerrado,1,baja
+13,24,5,15,Caso 13 asociado a motivo 15,2026-03-27 03:38:48,2026-04-02 05:38:48,cerrado,1,alta
+14,188,2,6,Caso 14 asociado a motivo 6,2026-03-18 14:26:31,,en_proceso,0,alta
+15,36,1,2,Caso 15 asociado a motivo 2,2026-02-21 19:25:10,2026-02-25 01:25:10,cerrado,1,critica
+16,96,2,4,Caso 16 asociado a motivo 4,2026-04-09 09:29:02,,en_proceso,0,baja
+17,78,5,14,Caso 17 asociado a motivo 14,2026-02-17 18:11:45,,en_proceso,0,media
+18,172,1,1,Caso 18 asociado a motivo 1,2026-03-01 16:50:11,2026-03-11 00:50:11,cerrado,1,alta
+19,180,2,6,Caso 19 asociado a motivo 6,2026-03-09 08:58:53,2026-03-23 09:58:53,cerrado,0,media
+20,179,1,1,Caso 20 asociado a motivo 1,2026-03-12 18:56:59,2026-04-01 05:56:59,cerrado,1,alta
+21,66,2,6,Caso 21 asociado a motivo 6,2026-03-12 18:08:05,2026-03-28 04:08:05,cerrado,0,baja
+22,51,4,12,Caso 22 asociado a motivo 12,2026-04-09 16:24:41,,en_proceso,0,media
+23,102,1,3,Caso 23 asociado a motivo 3,2026-03-11 18:19:05,2026-03-18 04:19:05,cerrado,1,baja
+24,138,1,3,Caso 24 asociado a motivo 3,2026-04-07 13:10:56,2026-04-27 22:10:56,cerrado,1,baja
+25,101,5,13,Caso 25 asociado a motivo 13,2026-04-02 13:26:56,2026-04-16 16:26:56,cerrado,1,baja
+26,61,1,1,Caso 26 asociado a motivo 1,2026-03-05 21:34:52,2026-03-18 00:34:52,cerrado,1,alta
+27,103,1,1,Caso 27 asociado a motivo 1,2026-02-11 09:15:27,2026-02-27 16:15:27,cerrado,1,critica
+28,15,5,15,Caso 28 asociado a motivo 15,2026-04-07 16:04:25,2026-04-07 21:04:25,cerrado,1,baja
+29,30,2,6,Caso 29 asociado a motivo 6,2026-02-20 09:11:38,2026-02-20 14:11:38,cerrado,1,media
+30,87,1,2,Caso 30 asociado a motivo 2,2026-03-12 21:57:46,2026-03-24 02:57:46,cancelado,0,media
+31,48,2,4,Caso 31 asociado a motivo 4,2026-03-05 17:18:57,2026-03-19 01:18:57,cerrado,1,alta
+32,182,4,10,Caso 32 asociado a motivo 10,2026-02-21 14:08:01,2026-03-07 20:08:01,cerrado,1,baja
+33,184,1,1,Caso 33 asociado a motivo 1,2026-03-31 08:51:59,2026-04-11 19:51:59,cerrado,0,media
+34,36,5,13,Caso 34 asociado a motivo 13,2026-02-15 19:06:41,2026-03-08 06:06:41,cerrado,1,baja
+35,179,1,3,Caso 35 asociado a motivo 3,2026-03-10 08:51:27,2026-03-29 14:51:27,cerrado,1,media
+36,147,3,8,Caso 36 asociado a motivo 8,2026-03-30 09:26:29,2026-04-05 17:26:29,cerrado,1,alta
+37,79,2,4,Caso 37 asociado a motivo 4,2026-03-04 06:41:48,2026-03-08 17:41:48,cerrado,1,baja
+38,151,4,12,Caso 38 asociado a motivo 12,2026-02-24 10:01:11,2026-03-09 20:01:11,cerrado,1,alta
+39,155,1,1,Caso 39 asociado a motivo 1,2026-03-26 09:33:36,,en_proceso,0,critica
+40,121,1,3,Caso 40 asociado a motivo 3,2026-04-11 09:37:39,2026-04-19 18:37:39,cerrado,1,baja
+41,135,5,15,Caso 41 asociado a motivo 15,2026-03-09 16:32:47,2026-03-18 16:32:47,cerrado,0,critica
+42,6,3,7,Caso 42 asociado a motivo 7,2026-02-11 14:58:34,,en_proceso,0,media
+43,133,2,5,Caso 43 asociado a motivo 5,2026-02-20 15:03:45,2026-03-05 22:03:45,cerrado,1,media
+44,133,3,7,Caso 44 asociado a motivo 7,2026-03-12 10:25:57,2026-03-25 10:25:57,cerrado,0,baja
+45,103,3,7,Caso 45 asociado a motivo 7,2026-03-20 10:19:18,,en_proceso,0,media
+46,196,1,1,Caso 46 asociado a motivo 1,2026-03-16 20:00:14,2026-03-18 22:00:14,cerrado,0,baja
+47,104,5,13,Caso 47 asociado a motivo 13,2026-02-15 21:20:40,2026-02-23 00:20:40,cerrado,1,alta
+48,135,2,5,Caso 48 asociado a motivo 5,2026-02-26 11:03:23,2026-03-10 22:03:23,cerrado,0,media
+49,177,5,13,Caso 49 asociado a motivo 13,2026-03-27 11:52:23,2026-03-30 12:52:23,cerrado,1,media
+50,70,2,4,Caso 50 asociado a motivo 4,2026-04-07 09:25:12,2026-04-21 11:25:12,cerrado,0,media
+51,31,1,1,Caso 51 asociado a motivo 1,2026-03-21 19:54:34,2026-03-30 03:54:34,cerrado,1,media
+52,16,2,5,Caso 52 asociado a motivo 5,2026-03-18 08:51:44,2026-03-26 19:51:44,cerrado,0,media
+53,26,3,9,Caso 53 asociado a motivo 9,2026-04-06 01:21:15,2026-04-07 04:21:15,cerrado,1,baja
+54,86,4,11,Caso 54 asociado a motivo 11,2026-04-11 08:04:38,2026-04-11 12:04:38,cerrado,1,baja
+55,65,5,13,Caso 55 asociado a motivo 13,2026-03-07 16:36:39,2026-03-15 17:36:39,cerrado,1,alta
+56,171,5,14,Caso 56 asociado a motivo 14,2026-04-03 09:15:41,2026-04-20 18:15:41,cerrado,1,media
+57,183,1,2,Caso 57 asociado a motivo 2,2026-02-13 15:17:34,2026-02-16 22:17:34,cerrado,1,baja
+58,147,3,7,Caso 58 asociado a motivo 7,2026-03-02 16:42:58,2026-03-17 23:42:58,cerrado,1,media
+59,69,5,14,Caso 59 asociado a motivo 14,2026-03-09 15:02:03,,en_proceso,0,baja
+60,100,2,6,Caso 60 asociado a motivo 6,2026-02-26 09:46:41,2026-02-26 13:46:41,cerrado,0,media
+61,24,3,8,Caso 61 asociado a motivo 8,2026-03-12 08:43:14,2026-04-01 13:43:14,cerrado,1,media
+62,53,3,7,Caso 62 asociado a motivo 7,2026-02-18 08:25:57,2026-02-24 16:25:57,cerrado,1,alta
+63,12,3,9,Caso 63 asociado a motivo 9,2026-03-11 10:55:04,2026-03-16 21:55:04,cerrado,0,media
+64,36,1,3,Caso 64 asociado a motivo 3,2026-03-10 14:31:24,2026-03-21 15:31:24,cerrado,1,critica
+65,126,5,14,Caso 65 asociado a motivo 14,2026-02-15 14:28:23,,en_proceso,0,media
+66,103,2,6,Caso 66 asociado a motivo 6,2026-02-16 13:14:45,2026-03-06 17:14:45,cerrado,0,baja
+67,26,2,5,Caso 67 asociado a motivo 5,2026-03-17 18:34:31,2026-03-23 19:34:31,cerrado,1,baja
+68,179,3,9,Caso 68 asociado a motivo 9,2026-03-04 08:24:20,2026-03-06 10:24:20,cerrado,1,alta
+69,100,2,4,Caso 69 asociado a motivo 4,2026-04-07 13:58:13,2026-04-11 23:58:13,cerrado,1,baja
+70,196,3,7,Caso 70 asociado a motivo 7,2026-03-29 14:32:58,2026-04-13 19:32:58,cerrado,1,media
+71,185,5,15,Caso 71 asociado a motivo 15,2026-03-11 14:38:53,2026-03-28 00:38:53,cerrado,1,media
+72,109,2,5,Caso 72 asociado a motivo 5,2026-03-09 20:00:53,2026-03-11 04:00:53,cerrado,0,alta
+73,102,2,5,Caso 73 asociado a motivo 5,2026-02-14 15:49:01,,en_proceso,0,critica
+74,60,5,13,Caso 74 asociado a motivo 13,2026-02-14 20:11:58,2026-02-24 00:11:58,cerrado,1,media
+75,173,3,7,Caso 75 asociado a motivo 7,2026-03-04 08:04:26,,en_proceso,0,baja
+76,138,1,2,Caso 76 asociado a motivo 2,2026-03-02 08:31:40,2026-03-10 16:31:40,cerrado,1,critica
+77,13,5,13,Caso 77 asociado a motivo 13,2026-03-17 16:30:30,,en_proceso,0,baja
+78,116,2,4,Caso 78 asociado a motivo 4,2026-02-27 14:08:04,2026-03-15 23:08:04,cerrado,0,media
+79,184,2,6,Caso 79 asociado a motivo 6,2026-03-21 10:02:27,2026-04-10 15:02:27,cerrado,1,media
+80,42,5,14,Caso 80 asociado a motivo 14,2026-02-13 13:30:07,,en_proceso,0,baja
+81,13,1,3,Caso 81 asociado a motivo 3,2026-02-11 15:52:37,2026-02-22 23:52:37,cerrado,1,media
+82,94,1,2,Caso 82 asociado a motivo 2,2026-03-09 19:01:32,2026-03-27 04:01:32,cancelado,0,media
+83,5,5,13,Caso 83 asociado a motivo 13,2026-03-30 16:57:43,2026-04-15 17:57:43,cerrado,0,baja
+84,30,1,1,Caso 84 asociado a motivo 1,2026-04-05 18:53:03,2026-04-16 00:53:03,cerrado,0,baja
+85,79,2,5,Caso 85 asociado a motivo 5,2026-02-19 08:09:43,2026-02-25 13:09:43,cerrado,1,alta
+86,85,3,9,Caso 86 asociado a motivo 9,2026-02-27 07:08:09,2026-03-19 17:08:09,cerrado,0,media
+87,69,2,4,Caso 87 asociado a motivo 4,2026-03-29 16:58:12,2026-04-15 20:58:12,cerrado,0,media
+88,24,4,10,Caso 88 asociado a motivo 10,2026-02-26 18:06:35,2026-03-13 18:06:35,cerrado,1,media
+89,83,5,15,Caso 89 asociado a motivo 15,2026-03-10 15:15:03,,en_proceso,0,media
+90,130,2,4,Caso 90 asociado a motivo 4,2026-03-14 13:41:14,,en_proceso,0,media
+91,147,5,14,Caso 91 asociado a motivo 14,2026-03-18 12:43:19,,en_proceso,0,media
+92,40,3,9,Caso 92 asociado a motivo 9,2026-04-02 09:46:19,2026-04-10 19:46:19,cerrado,1,baja
+93,90,2,4,Caso 93 asociado a motivo 4,2026-03-08 17:33:05,2026-03-25 17:33:05,cerrado,1,media
+94,29,1,3,Caso 94 asociado a motivo 3,2026-02-26 10:00:35,2026-03-01 15:00:35,cerrado,1,media
+95,38,2,5,Caso 95 asociado a motivo 5,2026-03-09 09:31:09,2026-03-27 16:31:09,cerrado,0,baja
+96,63,1,1,Caso 96 asociado a motivo 1,2026-02-25 18:07:28,2026-03-09 20:07:28,cerrado,0,alta
+97,186,1,2,Caso 97 asociado a motivo 2,2026-02-23 10:14:19,,en_proceso,0,baja
+98,103,1,1,Caso 98 asociado a motivo 1,2026-03-06 04:24:04,,en_proceso,0,alta
+99,18,4,12,Caso 99 asociado a motivo 12,2026-02-27 13:25:58,,en_proceso,0,alta
+100,156,1,2,Caso 100 asociado a motivo 2,2026-04-01 12:32:33,2026-04-14 17:32:33,cerrado,0,media
+101,29,3,8,Caso 101 asociado a motivo 8,2026-03-30 09:27:24,2026-04-08 10:27:24,cerrado,1,media
+102,2,4,10,Caso 102 asociado a motivo 10,2026-03-10 08:07:47,,en_proceso,0,alta
+103,175,3,9,Caso 103 asociado a motivo 9,2026-02-27 15:50:15,2026-03-09 16:50:15,cerrado,1,baja
+104,55,3,9,Caso 104 asociado a motivo 9,2026-02-14 14:16:45,2026-03-03 00:16:45,cerrado,1,media
+105,146,5,13,Caso 105 asociado a motivo 13,2026-04-11 09:04:20,,en_proceso,0,alta
+106,78,5,13,Caso 106 asociado a motivo 13,2026-02-11 17:38:46,2026-02-21 04:38:46,cerrado,0,baja
+107,143,3,8,Caso 107 asociado a motivo 8,2026-02-18 15:52:29,,en_proceso,0,critica
+108,27,1,3,Caso 108 asociado a motivo 3,2026-03-24 08:33:17,2026-04-01 18:33:17,cerrado,1,media
+109,53,1,1,Caso 109 asociado a motivo 1,2026-03-26 16:30:48,2026-03-30 22:30:48,cerrado,1,alta
+110,86,5,13,Caso 110 asociado a motivo 13,2026-02-10 17:57:48,2026-03-02 17:57:48,cerrado,0,media
+111,32,4,12,Caso 111 asociado a motivo 12,2026-02-13 15:59:05,,en_proceso,0,media
+112,21,3,7,Caso 112 asociado a motivo 7,2026-03-02 19:47:07,,en_proceso,0,baja
+113,28,5,13,Caso 113 asociado a motivo 13,2026-03-17 18:50:21,2026-04-03 23:50:21,cerrado,0,baja
+114,129,5,15,Caso 114 asociado a motivo 15,2026-02-28 12:12:22,2026-03-19 19:12:22,cerrado,0,baja
+115,129,2,6,Caso 115 asociado a motivo 6,2026-02-25 12:39:25,,en_proceso,0,baja
+116,185,5,15,Caso 116 asociado a motivo 15,2026-03-20 10:00:05,,en_proceso,0,baja
+117,142,1,1,Caso 117 asociado a motivo 1,2026-02-20 15:56:42,2026-02-21 17:56:42,cerrado,0,alta
+118,49,5,13,Caso 118 asociado a motivo 13,2026-03-09 10:36:54,,en_proceso,0,baja
+119,45,1,2,Caso 119 asociado a motivo 2,2026-03-19 20:42:42,2026-03-26 02:42:42,cerrado,0,media
+120,149,2,5,Caso 120 asociado a motivo 5,2026-03-06 21:48:50,,en_proceso,0,media
+121,43,5,13,Caso 121 asociado a motivo 13,2026-03-14 13:12:54,2026-03-31 15:12:54,cerrado,1,baja
+122,45,2,6,Caso 122 asociado a motivo 6,2026-02-17 18:49:16,2026-02-19 18:49:16,cerrado,0,alta

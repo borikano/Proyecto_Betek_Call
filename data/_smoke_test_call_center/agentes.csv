@@ -1,0 +1,21 @@
+id_agente,nombre,apellido,documento,cargo,telefono,email,fecha_ingreso,estado_agente,id_equipo,id_departamento
+1,Alejandra,Restrepo Morales,59022296,asesor_servicio,36025613,agente1@empresa.com,2025-03-04,activo,3,1
+2,Valentina,Diaz Perez,36208730,asesor_comercial,32556187,agente2@empresa.com,2025-05-26,activo,7,3
+3,Manuela,Vargas Lopez,64099313,asesor_servicio,33241699,agente3@empresa.com,2023-03-31,vacaciones,4,2
+4,Luis,Rodriguez Torres,38166292,asesor_comercial,31006208,agente4@empresa.com,2022-03-21,activo,10,4
+5,Catalina,Rodriguez Rodriguez,13888069,asesor_servicio,33745664,agente5@empresa.com,2024-12-24,activo,6,2
+6,Carolina,Hernandez Sanchez,22173364,asesor_servicio,31950104,agente6@empresa.com,2022-07-06,activo,3,1
+7,Luis,Castaño Quintero,95811887,asesor_servicio,37997792,agente7@empresa.com,2023-07-21,activo,2,1
+8,Jorge,Diaz Ortiz,93383678,asesor_servicio,35104146,agente8@empresa.com,2022-02-06,activo,2,1
+9,Maria,Sanchez Morales,91414212,asesor_comercial,38022822,agente9@empresa.com,2026-03-04,vacaciones,8,3
+10,Natalia,Torres Garcia,46092969,asesor_servicio,32674592,agente10@empresa.com,2024-06-17,activo,3,1
+11,Laura,Garcia Molina,38019704,asesor_servicio,35963750,agente11@empresa.com,2024-08-24,activo,2,1
+12,Miguel,Restrepo Quintero,47161439,asesor_servicio,39733155,agente12@empresa.com,2023-07-13,vacaciones,11,5
+13,Juan,Perez Ramirez,59867846,asesor_servicio,31643449,agente13@empresa.com,2025-12-29,activo,3,1
+14,Yuliana,Garcia Perez,60137634,asesor_comercial,35036867,agente14@empresa.com,2024-08-13,vacaciones,9,4
+15,Sara,Agudelo Bedoya,49357423,asesor_servicio,31730891,agente15@empresa.com,2023-03-14,activo,1,1
+16,Sebastian,Ramirez Agudelo,98417878,asesor_servicio,39520018,agente16@empresa.com,2025-09-19,activo,1,1
+17,Camilo,Morales Lopez,14549149,asesor_comercial,31240721,agente17@empresa.com,2024-02-05,activo,7,3
+18,Miguel,Restrepo Castaño,21757001,asesor_servicio,37574569,agente18@empresa.com,2025-07-22,activo,3,1
+19,Catalina,Morales Lopez,93415486,asesor_servicio,38628902,agente19@empresa.com,2023-09-28,activo,11,5
+20,Maria,Restrepo Agudelo,79304179,asesor_servicio,36027810,agente20@empresa.com,2024-04-01,activo,12,5
