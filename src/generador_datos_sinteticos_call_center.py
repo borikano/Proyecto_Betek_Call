@@ -288,6 +288,67 @@ class SyntheticCallCenterGenerator:
         bounded_start = min(max(start_dt, history_start), latest_start)
         return bounded_start, bounded_start + timedelta(seconds=int(duration_seconds))
 
+    def _service_calendar(self, service_id: int) -> Dict[str, object]:
+        calendars = {
+            1: {"name": "atencion_cliente", "weekdays": set(range(7)), "start_hour": 7, "end_hour": 21},
+            2: {"name": "soporte_tecnico", "weekdays": set(range(7)), "start_hour": 0, "end_hour": 24},
+            3: {"name": "ventas", "weekdays": set(range(6)), "start_hour": 9, "end_hour": 19},
+            4: {"name": "telemarketing", "weekdays": set(range(6)), "start_hour": 9, "end_hour": 19},
+            5: {"name": "facturacion", "weekdays": set(range(6)), "start_hour": 8, "end_hour": 18},
+        }
+        return calendars[int(service_id)]
+
+    def _day_at_hour(self, day: date, hour: int) -> datetime:
+        base = datetime.combine(day, datetime.min.time())
+        if hour == 24:
+            return base + timedelta(days=1)
+        return base.replace(hour=int(hour))
+
+    def _bounded_service_call_window(self, service_id: int, start_dt: datetime, duration_seconds: int) -> tuple[datetime, datetime]:
+        duration_seconds = int(duration_seconds)
+        history_start = self._history_start_datetime()
+        history_end = self._history_end_datetime()
+        service = self._service_calendar(service_id)
+
+        if int(service["start_hour"]) == 0 and int(service["end_hour"]) == 24:
+            return self._bounded_call_window(start_dt, duration_seconds)
+
+        current = self._clip_datetime_to_history(start_dt)
+        max_days = max(1, (self.end_date - self.start_date).days + 2)
+
+        for offset in range(max_days):
+            candidate_day = current.date() + timedelta(days=offset)
+            if candidate_day > self.end_date:
+                break
+            if candidate_day.weekday() not in service["weekdays"]:
+                continue
+
+            service_start = self._day_at_hour(candidate_day, int(service["start_hour"]))
+            service_end = self._day_at_hour(candidate_day, int(service["end_hour"]))
+
+            candidate_start = max(current, service_start) if offset == 0 else service_start
+            latest_start = min(service_end, history_end) - timedelta(seconds=duration_seconds)
+
+            if candidate_start <= latest_start:
+                candidate_start = max(candidate_start, history_start)
+                return candidate_start, candidate_start + timedelta(seconds=duration_seconds)
+
+        for offset in range(max_days):
+            candidate_day = self.end_date - timedelta(days=offset)
+            if candidate_day < self.start_date:
+                break
+            if candidate_day.weekday() not in service["weekdays"]:
+                continue
+
+            service_start = self._day_at_hour(candidate_day, int(service["start_hour"]))
+            service_end = min(self._day_at_hour(candidate_day, int(service["end_hour"])), history_end)
+            latest_start = service_end - timedelta(seconds=duration_seconds)
+
+            if latest_start >= service_start:
+                return latest_start, latest_start + timedelta(seconds=duration_seconds)
+
+        return self._bounded_call_window(start_dt, duration_seconds)
+
     def _docs(self, n: int):
         types_ = self._choice(["CC","CE","NIT","TI"], [0.70,0.10,0.15,0.05], size=n)
         nums = self.rng.choice(np.arange(10_000_000, 99_999_999), size=n, replace=False)
@@ -698,7 +759,7 @@ class SyntheticCallCenterGenerator:
                         result = self._choice(["pendiente","escalada","transferida"], [0.45,0.30,0.25], size=1)[0]
 
                 result_id = {"resuelta":1,"escalada":2,"pendiente":3,"abandonada":4,"no_contestada":5,"transferida":6,"venta_realizada":7}[result]
-                start_dt, end_dt = self._bounded_call_window(current_dt, dur_s)
+                start_dt, end_dt = self._bounded_service_call_window(service_id, current_dt, dur_s)
                 tipo = "entrante" if service_id != 4 else self._choice(["entrante","saliente"], [0.20,0.80], size=1)[0]
                 canal = self._choice(["telefono","voip","campana"], [0.68,0.24,0.08], size=1)[0]
                 follow = 1 if result in ["pendiente","escalada","transferida"] else 0
@@ -801,7 +862,7 @@ class SyntheticCallCenterGenerator:
                 call_agent = agent_id
 
             result_id = {"resuelta":1,"escalada":2,"pendiente":3,"abandonada":4,"no_contestada":5,"transferida":6,"venta_realizada":7}[result]
-            start_dt, end_dt = self._bounded_call_window(times[i], dur_s)
+            start_dt, end_dt = self._bounded_service_call_window(service_id, times[i], dur_s)
             tipo = self._choice(["entrante","saliente"], [0.80,0.20], size=1)[0] if service_id != 4 else self._choice(["entrante","saliente"], [0.18,0.82], size=1)[0]
             canal = self._choice(["telefono","voip","campana"], [0.72,0.22,0.06], size=1)[0]
             follow = 1 if result in ["pendiente","transferida"] else 0
