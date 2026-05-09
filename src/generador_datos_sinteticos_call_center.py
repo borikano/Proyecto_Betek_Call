@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import unicodedata
 from dataclasses import dataclass, asdict
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -202,6 +203,12 @@ class SyntheticCallCenterGenerator:
         probs = np.array(probs, dtype=float)
         probs /= probs.sum()
         return self.rng.choice(values, size=size, p=probs)
+
+    def _ascii_text(self, value):
+        if pd.isna(value):
+            return value
+        normalized = unicodedata.normalize("NFKD", str(value))
+        return normalized.encode("ascii", "ignore").decode("ascii")
 
     def _random_dates(self, start: date, end: date, size: int) -> List[date]:
         total_days = max(1, (end - start).days)
@@ -956,10 +963,16 @@ class SyntheticCallCenterGenerator:
         export_tables["casos"]["fecha_cierre"] = pd.to_datetime(export_tables["casos"]["fecha_cierre"])
         export_tables["encuestas_satisfaccion"]["fecha_encuesta"] = pd.to_datetime(export_tables["encuestas_satisfaccion"]["fecha_encuesta"])
 
-        return {
+        cleaned_tables = {
             name: df.loc[:, SQL_EXPORT_COLUMNS[name]].copy()
             for name, df in export_tables.items()
         }
+
+        for df in cleaned_tables.values():
+            for column in df.select_dtypes(include=["object", "string"]).columns:
+                df[column] = df[column].map(self._ascii_text)
+
+        return cleaned_tables
 
     def _build_psql_loader(self, export_tables: Dict[str, pd.DataFrame]) -> str:
         lines = [
