@@ -984,6 +984,113 @@ class SyntheticCallCenterGenerator:
         neg_wait = int((llamadas["tiempo_espera_segundos"].astype(int) < 0).sum())
         record("llamadas.non_negative_wait", neg_wait == 0, {"negative_waits": neg_wait})
 
+        history_start_dt = self._history_start_datetime()
+        history_end_dt = self._history_end_datetime()
+
+        def record_datetime_range(table_name: str, column_name: str) -> None:
+            series = pd.to_datetime(self.tables[table_name][column_name], errors="coerce").dropna()
+            before = int((series < history_start_dt).sum())
+            after = int((series > history_end_dt).sum())
+            record(
+                f"{table_name}.{column_name}_within_history_range",
+                before == 0 and after == 0,
+                {"before_start": before, "after_end": after}
+            )
+
+        for table_name, column_name in [
+            ("llamadas", "fecha_hora_inicio"),
+            ("llamadas", "fecha_hora_fin"),
+            ("casos", "fecha_apertura"),
+            ("casos", "fecha_cierre"),
+            ("encuestas_satisfaccion", "fecha_encuesta"),
+        ]:
+            record_datetime_range(table_name, column_name)
+
+        def record_date_range(table_name: str, column_name: str) -> None:
+            series = pd.to_datetime(self.tables[table_name][column_name], errors="coerce").dropna()
+            start_bound = pd.Timestamp(self.start_date)
+            end_bound = pd.Timestamp(self.end_date)
+            before = int((series < start_bound).sum())
+            after = int((series > end_bound).sum())
+            record(
+                f"{table_name}.{column_name}_within_history_range",
+                before == 0 and after == 0,
+                {"before_start": before, "after_end": after}
+            )
+
+        for table_name, column_name in [
+            ("facturas", "fecha_emision"),
+            ("facturas", "fecha_vencimiento"),
+            ("pagos", "fecha_pago"),
+        ]:
+            record_date_range(table_name, column_name)
+
+        call_days = set(pd.to_datetime(llamadas["fecha_hora_inicio"]).dt.date.tolist())
+        expected_days = set(pd.date_range(self.start_date, self.end_date, freq="D").date.tolist())
+        missing_days = sorted(d.isoformat() for d in expected_days - call_days)
+        record(
+            "llamadas.daily_coverage",
+            len(missing_days) == 0,
+            {"missing_days": missing_days[:20], "missing_days_count": len(missing_days)}
+        )
+
+        def invalid_operating_calendar_rows(df: pd.DataFrame, service_id: int) -> int:
+            if df.empty:
+                return 0
+            service = self._service_calendar(service_id)
+            if int(service["start_hour"]) == 0 and int(service["end_hour"]) == 24:
+                return 0
+
+            starts = pd.to_datetime(df["fecha_hora_inicio"], errors="coerce")
+            ends = pd.to_datetime(df["fecha_hora_fin"], errors="coerce")
+            weekdays = starts.dt.weekday
+            start_hours = starts.dt.hour + starts.dt.minute / 60 + starts.dt.second / 3600
+            end_hours = ends.dt.hour + ends.dt.minute / 60 + ends.dt.second / 3600
+            same_day = starts.dt.date == ends.dt.date
+
+            invalid = (
+                ~weekdays.isin(service["weekdays"])
+                | (start_hours < int(service["start_hour"]))
+                | (end_hours > int(service["end_hour"]))
+                | (~same_day)
+            )
+            return int(invalid.sum())
+
+        for service_id, label in [
+            (1, "atencion_cliente"),
+            (3, "ventas"),
+            (4, "telemarketing"),
+            (5, "facturacion"),
+        ]:
+            service_calls = llamadas[llamadas["id_tipo_servicio"].astype(int) == service_id]
+            invalid_rows = invalid_operating_calendar_rows(service_calls, service_id)
+            record(
+                f"llamadas.{label}_operating_calendar",
+                invalid_rows == 0,
+                {"invalid_rows": invalid_rows}
+            )
+
+        motivos = self.tables["motivos_llamada"][["id_motivo", "id_tipo_servicio"]].copy()
+        motivos["id_motivo"] = motivos["id_motivo"].astype(int)
+        motivos["id_tipo_servicio"] = motivos["id_tipo_servicio"].astype(int)
+
+        for table_name in ["casos", "llamadas"]:
+            merged = self.tables[table_name][["id_motivo", "id_tipo_servicio"]].copy()
+            merged = merged.dropna(subset=["id_motivo", "id_tipo_servicio"])
+            merged["id_motivo"] = merged["id_motivo"].astype(int)
+            merged["id_tipo_servicio"] = merged["id_tipo_servicio"].astype(int)
+            merged = merged.merge(
+                motivos.rename(columns={"id_tipo_servicio": "id_tipo_servicio_motivo"}),
+                on="id_motivo",
+                how="left"
+            )
+            mismatches = int((merged["id_tipo_servicio"] != merged["id_tipo_servicio_motivo"]).sum())
+            record(
+                f"{table_name}.motivo_matches_tipo_servicio",
+                mismatches == 0,
+                {"mismatches": mismatches}
+            )
+
         casos = self.tables["casos"].dropna(subset=["fecha_cierre"]).copy()
         invalid_case_dates = int((pd.to_datetime(casos["fecha_cierre"]) < pd.to_datetime(casos["fecha_apertura"])).sum())
         record("casos.valid_dates", invalid_case_dates == 0, {"invalid_case_dates": invalid_case_dates})
@@ -1026,6 +1133,31 @@ class SyntheticCallCenterGenerator:
             record("casos.fcr_has_single_call", invalid_fcr == 0, {"invalid_fcr_cases": invalid_fcr})
         else:
             record("casos.fcr_has_single_call", True, {"invalid_fcr_cases": 0})
+
+        case_calls_for_close = llamadas.dropna(subset=["id_caso"]).copy()
+        if len(case_calls_for_close):
+            case_calls_for_close["id_caso"] = case_calls_for_close["id_caso"].astype(int)
+            last_call_end = case_calls_for_close.groupby("id_caso")["fecha_hora_fin"].max()
+            closed_cases = self.tables["casos"][
+                self.tables["casos"]["estado_caso"].isin(["cerrado", "cancelado"])
+                & self.tables["casos"]["fecha_cierre"].notna()
+            ][["id_caso", "fecha_cierre"]].copy()
+            closed_cases["id_caso"] = closed_cases["id_caso"].astype(int)
+            closed_cases = closed_cases.merge(
+                last_call_end.rename("ultima_llamada_fin"),
+                left_on="id_caso",
+                right_index=True,
+                how="left"
+            )
+            invalid_close = int(
+                (
+                    pd.to_datetime(closed_cases["fecha_cierre"], errors="coerce")
+                    < pd.to_datetime(closed_cases["ultima_llamada_fin"], errors="coerce")
+                ).sum()
+            )
+            record("casos.close_after_last_call", invalid_close == 0, {"invalid_closed_cases": invalid_close})
+        else:
+            record("casos.close_after_last_call", True, {"invalid_closed_cases": 0})
 
         self.report["validations"] = val
         self.report["row_counts"] = {k: int(len(v)) for k, v in self.tables.items()}
