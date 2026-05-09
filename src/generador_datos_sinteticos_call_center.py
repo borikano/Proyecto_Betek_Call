@@ -891,6 +891,18 @@ class SyntheticCallCenterGenerator:
         export_tables["pagos"]["metodo_pago"] = export_tables["pagos"]["metodo_pago"].replace({
             "debito_automatico": "recaudo_externo"
         })
+
+        # Evita que columnas FK enteras con nulos se exporten como 18.0, 333.0, etc.
+        nullable_integer_columns = {
+            "llamadas": ["id_agente", "id_caso"],
+        }
+        for table_name, columns in nullable_integer_columns.items():
+            for column in columns:
+                export_tables[table_name][column] = (
+                    pd.to_numeric(export_tables[table_name][column], errors="coerce")
+                    .astype("Int64")
+                )
+
         export_tables["casos"]["fecha_apertura"] = pd.to_datetime(export_tables["casos"]["fecha_apertura"])
         export_tables["casos"]["fecha_cierre"] = pd.to_datetime(export_tables["casos"]["fecha_cierre"])
         export_tables["encuestas_satisfaccion"]["fecha_encuesta"] = pd.to_datetime(export_tables["encuestas_satisfaccion"]["fecha_encuesta"])
