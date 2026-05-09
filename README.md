@@ -179,26 +179,37 @@ La configuración está definida en:
 - `.gitattributes`
 - `requirements.txt`
 
-## Próxima Fase: Dataset 125k
+## Dataset Ampliado 125k
 
-La siguiente fase consiste en generar un dataset ampliado con:
+El dataset ampliado se encuentra en:
 
-- 125.000 clientes;
-- trazabilidad desde `2025-06-01` hasta `2026-05-26`;
-- datos diarios para análisis en Power BI;
-- reglas horarias por tipo de servicio;
-- validaciones reforzadas de calidad.
+    data/call_center_analytics_20260526_125k/
 
-Antes de generar el dataset 125k, se ajustará el generador para:
+Caracteristicas principales:
 
-- soportar fecha inicial explícita;
-- evitar IDs nulos exportados como decimales;
-- mantener eventos dentro del rango histórico;
-- asegurar coherencia entre cierre de casos y última llamada;
-- aplicar horarios operativos por tipo de servicio;
-- garantizar cobertura diaria de datos;
-- mejorar validaciones del reporte de calidad;
-- mantener el modelo SQL sin agregar ni retirar tablas.
+- 125.000 clientes.
+- Trazabilidad desde `2025-06-01` hasta `2026-05-26`.
+- Datos diarios para analisis en Power BI.
+- Reglas horarias por tipo de servicio.
+- Validaciones reforzadas de calidad.
+- Textos exportados sin acentos ni `ñ` para mejorar compatibilidad con Excel, PostgreSQL y Power BI.
+
+Conteos principales:
+
+- `clientes`: 125000
+- `agentes`: 750
+- `llamadas`: 628679
+- `casos`: 122211
+- `facturas`: 1039992
+- `pagos`: 778227
+- `encuestas_satisfaccion`: 144356
+
+Validaciones realizadas:
+
+- Sin validaciones fallidas en `quality_report.json`.
+- Sin archivos mayores a 95 MB.
+- Sin acentos ni `ñ` en los CSV exportados.
+- Rango historico confirmado: `2025-06-01` a `2026-05-26`.
 
 ## Reglas Operativas Objetivo
 
