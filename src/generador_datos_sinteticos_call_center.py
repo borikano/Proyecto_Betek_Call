@@ -228,6 +228,25 @@ class SyntheticCallCenterGenerator:
             out.append(ts)
         return out
 
+    def _history_start_datetime(self) -> datetime:
+        return datetime.combine(self.start_date, datetime.min.time())
+
+    def _history_end_datetime(self) -> datetime:
+        return datetime.combine(self.end_date, datetime.max.time()).replace(microsecond=0)
+
+    def _clip_date_to_history(self, value: date) -> date:
+        return min(max(value, self.start_date), self.end_date)
+
+    def _clip_datetime_to_history(self, value: datetime) -> datetime:
+        return min(max(value, self._history_start_datetime()), self._history_end_datetime())
+
+    def _bounded_call_window(self, start_dt: datetime, duration_seconds: int) -> tuple[datetime, datetime]:
+        history_start = self._history_start_datetime()
+        history_end = self._history_end_datetime()
+        latest_start = max(history_start, history_end - timedelta(seconds=int(duration_seconds)))
+        bounded_start = min(max(start_dt, history_start), latest_start)
+        return bounded_start, bounded_start + timedelta(seconds=int(duration_seconds))
+
     def _docs(self, n: int):
         types_ = self._choice(["CC","CE","NIT","TI"], [0.70,0.10,0.15,0.05], size=n)
         nums = self.rng.choice(np.arange(10_000_000, 99_999_999), size=n, replace=False)
@@ -498,7 +517,8 @@ class SyntheticCallCenterGenerator:
                     chosen.append(period)
             for period in chosen:
                 emission = date(period.year, period.month, min(int(self.rng.integers(1,25)), 28))
-                due = emission + timedelta(days=int(self.rng.integers(10,20)))
+                emission = self._clip_date_to_history(emission)
+                due = min(emission + timedelta(days=int(self.rng.integers(10,20))), self.end_date)
                 value = int(max(10000, row.valor_base + self.rng.integers(-8000, 12000)))
                 state = self._choice(["pagada","pendiente","vencida","en_mora"], [0.70,0.14,0.10,0.06], size=1)[0]
                 number = f"FAC-{emission.strftime('%Y%m')}-{iid:07d}"
@@ -507,11 +527,13 @@ class SyntheticCallCenterGenerator:
                 ))
                 if state == "pagada":
                     pay_date = max(emission, due - timedelta(days=int(self.rng.integers(0,10))))
+                    pay_date = self._clip_date_to_history(pay_date)
                     pay_rows.append((pid, iid, pay_date, value, self.rng.choice(["pse","tarjeta_credito","tarjeta_debito","transferencia","efectivo","debito_automatico"]), "aplicado"))
                     pid += 1
                 elif self.rng.random() < (0.20 if state == "pendiente" else 0.12):
                     partial = int(value * float(self.rng.uniform(0.25, 0.85)))
-                    pay_rows.append((pid, iid, due + timedelta(days=int(self.rng.integers(0,25))), partial, self.rng.choice(["pse","tarjeta_credito","tarjeta_debito","transferencia","efectivo","debito_automatico"]), "parcial"))
+                    partial_pay_date = self._clip_date_to_history(due + timedelta(days=int(self.rng.integers(0,25))))
+                    pay_rows.append((pid, iid, partial_pay_date, partial, self.rng.choice(["pse","tarjeta_credito","tarjeta_debito","transferencia","efectivo","debito_automatico"]), "parcial"))
                     pid += 1
                 iid += 1
 
@@ -636,8 +658,7 @@ class SyntheticCallCenterGenerator:
                         result = self._choice(["pendiente","escalada","transferida"], [0.45,0.30,0.25], size=1)[0]
 
                 result_id = {"resuelta":1,"escalada":2,"pendiente":3,"abandonada":4,"no_contestada":5,"transferida":6,"venta_realizada":7}[result]
-                start_dt = current_dt
-                end_dt = start_dt + timedelta(seconds=dur_s)
+                start_dt, end_dt = self._bounded_call_window(current_dt, dur_s)
                 tipo = "entrante" if service_id != 4 else self._choice(["entrante","saliente"], [0.20,0.80], size=1)[0]
                 canal = self._choice(["telefono","voip","campana"], [0.68,0.24,0.08], size=1)[0]
                 follow = 1 if result in ["pendiente","escalada","transferida"] else 0
@@ -672,6 +693,29 @@ class SyntheticCallCenterGenerator:
         casos["resuelto_primer_contacto"] = casos["id_caso"].isin(valid_fcr).astype(int)
         casos.loc[casos["resuelto_primer_contacto"] == 1, "estado_caso"] = "cerrado"
         casos.loc[casos["fecha_cierre"].isna() & (casos["estado_caso"] == "cerrado"), "fecha_cierre"] = casos["fecha_apertura"]
+
+        last_call_end = (
+            calls.dropna(subset=["id_caso"])
+            .assign(id_caso=lambda df: df["id_caso"].astype(int))
+            .groupby("id_caso")["fecha_hora_fin"]
+            .max()
+        )
+        casos = casos.merge(last_call_end.rename("ultima_llamada_fin"), left_on="id_caso", right_index=True, how="left")
+
+        closed_mask = casos["estado_caso"].isin(["cerrado", "cancelado"])
+        missing_close_mask = closed_mask & casos["fecha_cierre"].isna()
+        casos.loc[missing_close_mask, "fecha_cierre"] = casos.loc[missing_close_mask, "fecha_apertura"]
+
+        case_close = pd.to_datetime(casos["fecha_cierre"], errors="coerce")
+        last_end = pd.to_datetime(casos["ultima_llamada_fin"], errors="coerce")
+        aligned_close = pd.concat([case_close, last_end], axis=1).max(axis=1)
+        align_mask = closed_mask & last_end.notna()
+        casos.loc[align_mask, "fecha_cierre"] = aligned_close[align_mask]
+
+        history_end = self._history_end_datetime()
+        case_close = pd.to_datetime(casos["fecha_cierre"], errors="coerce")
+        casos.loc[case_close > history_end, "fecha_cierre"] = history_end
+        casos = casos.drop(columns=["ultima_llamada_fin"])
 
         self.tables["casos"] = casos
         self.tables["llamadas"] = calls.sort_values("fecha_hora_inicio").reset_index(drop=True)
@@ -717,8 +761,7 @@ class SyntheticCallCenterGenerator:
                 call_agent = agent_id
 
             result_id = {"resuelta":1,"escalada":2,"pendiente":3,"abandonada":4,"no_contestada":5,"transferida":6,"venta_realizada":7}[result]
-            start_dt = times[i]
-            end_dt = start_dt + timedelta(seconds=dur_s)
+            start_dt, end_dt = self._bounded_call_window(times[i], dur_s)
             tipo = self._choice(["entrante","saliente"], [0.80,0.20], size=1)[0] if service_id != 4 else self._choice(["entrante","saliente"], [0.18,0.82], size=1)[0]
             canal = self._choice(["telefono","voip","campana"], [0.72,0.22,0.06], size=1)[0]
             follow = 1 if result in ["pendiente","transferida"] else 0
@@ -738,6 +781,10 @@ class SyntheticCallCenterGenerator:
         cases = self.tables["casos"][["id_caso","resuelto_primer_contacto"]]
         fcr_map = dict(zip(cases["id_caso"], cases["resuelto_primer_contacto"]))
         eligible = calls[~calls["id_resultado"].isin([4,5])].copy()
+        history_end = self._history_end_datetime()
+        eligible = eligible[
+            pd.to_datetime(eligible["fecha_hora_fin"]) <= (history_end - timedelta(hours=1))
+        ].copy()
         target = int(self.rng.integers(self.config.surveys_target_min, self.config.surveys_target_max + 1))
         n = min(len(eligible), target)
         selected = eligible.loc[self.rng.choice(eligible.index.to_numpy(), size=n, replace=False)].copy()
@@ -769,6 +816,8 @@ class SyntheticCallCenterGenerator:
                 minutes=int(self.rng.integers(0,60)),
                 seconds=int(self.rng.integers(0,60)),
             )
+            if survey_date.to_pydatetime() > history_end:
+                survey_date = pd.Timestamp(history_end)
             rows.append((idx, int(row.id_llamada), int(row.id_cliente), rating, comment, survey_date))
         self.tables["encuestas_satisfaccion"] = pd.DataFrame(rows, columns=[
             "id_encuesta","id_llamada","id_cliente","calificacion","comentario","fecha_encuesta"
