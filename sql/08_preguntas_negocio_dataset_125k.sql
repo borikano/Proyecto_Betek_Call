@@ -20,7 +20,8 @@ FROM llamadas l
 JOIN motivos_llamada ml ON ml.id_motivo = l.id_motivo
 JOIN tipos_servicio ts ON ts.id_tipo_servicio = l.id_tipo_servicio
 GROUP BY ml.id_motivo, ml.nombre_motivo, ts.nombre_servicio
-ORDER BY total_llamadas DESC, ml.id_motivo;
+ORDER BY total_llamadas DESC, ml.id_motivo
+LIMIT 10;
 
 
 -- ============================================================
@@ -34,7 +35,8 @@ SELECT
     COUNT(*) FILTER (WHERE tipo_llamada = 'saliente') AS llamadas_salientes
 FROM llamadas
 GROUP BY date_trunc('month', fecha_hora_inicio)::date
-ORDER BY mes;
+ORDER BY mes
+LIMIT 10;
 
 
 -- ============================================================
@@ -53,7 +55,8 @@ FROM llamadas l
 JOIN motivos_llamada ml ON ml.id_motivo = l.id_motivo
 JOIN tipos_servicio ts ON ts.id_tipo_servicio = l.id_tipo_servicio
 GROUP BY ml.id_motivo, ml.nombre_motivo, ts.nombre_servicio
-ORDER BY total_llamadas DESC, duracion_promedio_segundos DESC;
+ORDER BY total_llamadas DESC, duracion_promedio_segundos DESC
+LIMIT 10;
 
 
 -- ============================================================
@@ -98,7 +101,8 @@ GROUP BY
         WHEN fecha_hora_inicio::time >= TIME '12:00:00' AND fecha_hora_inicio::time < TIME '18:00:00' THEN 'tarde'
         ELSE 'noche'
     END
-ORDER BY total_llamadas DESC, orden_dia, franja_horaria;
+ORDER BY total_llamadas DESC, orden_dia, franja_horaria
+LIMIT 10;
 
 
 -- ============================================================
@@ -127,7 +131,7 @@ GROUP BY
     c.resuelto_primer_contacto
 HAVING COUNT(*) > 1
 ORDER BY mes, total_llamadas_caso DESC, l.id_cliente
-LIMIT 100;
+LIMIT 10;
 
 
 -- Resumen mensual de clientes con multiples llamadas por caso.
@@ -150,7 +154,8 @@ FROM (
     HAVING COUNT(*) > 1
 ) base
 GROUP BY mes
-ORDER BY mes;
+ORDER BY mes
+LIMIT 10;
 
 
 -- ============================================================
@@ -182,7 +187,7 @@ ORDER BY
     satisfaccion_promedio DESC NULLS LAST,
     tasa_resolucion_porcentaje DESC,
     total_llamadas_atendidas DESC
-LIMIT 50;
+LIMIT 10;
 
 
 -- ============================================================
@@ -216,7 +221,7 @@ LEFT JOIN pagos_por_factura p ON p.id_factura = f.id_factura
 WHERE f.estado_factura IN ('vencida', 'en_mora')
    OR f.valor_total > COALESCE(p.total_pagado, 0)
 ORDER BY saldo_pendiente DESC, f.fecha_vencimiento
-LIMIT 100;
+LIMIT 10;
 
 
 -- Resumen de cartera por estado de factura.
@@ -237,7 +242,8 @@ SELECT
 FROM facturas f
 LEFT JOIN pagos_por_factura p ON p.id_factura = f.id_factura
 GROUP BY f.estado_factura
-ORDER BY saldo_pendiente DESC;
+ORDER BY saldo_pendiente DESC
+LIMIT 10;
 
 
 -- ============================================================
@@ -260,7 +266,8 @@ FROM departamentos d
 JOIN llamadas l ON l.id_departamento = d.id_departamento
 LEFT JOIN resultados_llamada rl ON rl.id_resultado = l.id_resultado
 GROUP BY d.id_departamento, d.nombre_departamento
-ORDER BY duracion_promedio_segundos DESC, tasa_resolucion_porcentaje ASC;
+ORDER BY duracion_promedio_segundos DESC, tasa_resolucion_porcentaje ASC
+LIMIT 10;
 
 
 -- ============================================================
@@ -283,7 +290,8 @@ FROM encuestas_satisfaccion e
 JOIN llamadas l ON l.id_llamada = e.id_llamada
 JOIN tipos_servicio ts ON ts.id_tipo_servicio = l.id_tipo_servicio
 GROUP BY ts.id_tipo_servicio, ts.nombre_servicio
-ORDER BY satisfaccion_promedio DESC, total_encuestas DESC;
+ORDER BY satisfaccion_promedio DESC, total_encuestas DESC
+LIMIT 10;
 
 
 SELECT
@@ -302,4 +310,5 @@ JOIN tipos_servicio ts ON ts.id_tipo_servicio = l.id_tipo_servicio
 GROUP BY a.id_agente, a.nombre, a.apellido, ts.nombre_servicio
 HAVING COUNT(e.id_encuesta) >= 10
 ORDER BY satisfaccion_promedio DESC, total_encuestas DESC
-LIMIT 100;
+LIMIT 10;
+
