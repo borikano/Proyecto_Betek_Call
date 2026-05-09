@@ -223,3 +223,66 @@ Para la generación ampliada se consideran las siguientes reglas:
 ## Nota Sobre Portabilidad
 
 Los loaders usan rutas relativas al repositorio. Esto permite clonar el proyecto y ejecutar los scripts desde otra máquina, siempre que se lancen desde la raíz del repositorio.
+
+## Estado Actual y Siguientes Pasos
+
+Version de referencia del proyecto:
+
+    v1.0.0-125k
+
+Esta version incluye:
+
+- estructura reorganizada del repositorio;
+- generador Python unificado;
+- dataset base inicial;
+- dataset ampliado de 125.000 clientes;
+- rango historico desde `2025-06-01` hasta `2026-05-26`;
+- validaciones reforzadas de calidad;
+- reglas operativas por tipo de servicio;
+- script reproducible para generar el dataset ampliado;
+- documentacion actualizada para trabajo en VSCode, GitHub, PostgreSQL y Power BI.
+
+## Datasets Disponibles
+
+El repositorio contiene tres conjuntos principales:
+
+- `data/_smoke_test_call_center/`: dataset reducido para pruebas rapidas.
+- `data/call_center_analytics_20260410/`: dataset base inicial.
+- `data/call_center_analytics_20260526_125k/`: dataset ampliado de 125.000 clientes.
+
+## Dataset 125k
+
+El dataset ampliado tiene los siguientes conteos principales:
+
+- `clientes`: 125000
+- `agentes`: 750
+- `llamadas`: 628679
+- `casos`: 122211
+- `facturas`: 1039992
+- `pagos`: 778227
+- `encuestas_satisfaccion`: 144356
+
+Validaciones realizadas:
+
+- sin validaciones fallidas en `quality_report.json`;
+- sin archivos mayores a 95 MB;
+- sin acentos ni `ñ` en los CSV exportados;
+- fechas dentro del rango historico definido;
+- reglas horarias aplicadas por tipo de servicio.
+
+## Reglas Operativas Aplicadas
+
+- Ventas y telemarketing: lunes a sabado, de 09:00 a 19:00.
+- Soporte tecnico: operacion 24/7.
+- Atencion al cliente: todos los dias, de 07:00 a 21:00.
+- Facturacion: lunes a sabado, en horario operativo definido para el proyecto.
+
+## Proximas Fases
+
+1. Crear la base de datos en PostgreSQL.
+2. Ejecutar el DDL oficial desde `sql/06_ddl_sql_creacion_tablas.sql`.
+3. Cargar el dataset ampliado `data/call_center_analytics_20260526_125k/`.
+4. Validar integridad, conteos y reglas desde PostgreSQL.
+5. Conectar Power BI al modelo relacional.
+6. Construir modelo semantico, medidas DAX y dashboards.
+
