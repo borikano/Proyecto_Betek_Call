@@ -1,0 +1,13 @@
+id_equipo,nombre_equipo,id_departamento,descripcion
+1,frontline_1,1,Equipo frontline_1
+2,frontline_2,1,Equipo frontline_2
+3,frontline_3,1,Equipo frontline_3
+4,soporte_1,2,Equipo soporte_1
+5,soporte_2,2,Equipo soporte_2
+6,soporte_3,2,Equipo soporte_3
+7,ventas_1,3,Equipo ventas_1
+8,ventas_2,3,Equipo ventas_2
+9,tele_1,4,Equipo tele_1
+10,tele_2,4,Equipo tele_2
+11,facturacion_1,5,Equipo facturacion_1
+12,facturacion_2,5,Equipo facturacion_2

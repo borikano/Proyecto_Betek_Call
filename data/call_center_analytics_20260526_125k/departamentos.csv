@@ -1,0 +1,6 @@
+id_departamento,nombre_departamento,descripcion
+1,atencion_cliente,Atencion general y orientacion
+2,soporte_tecnico,Atencion de fallas e incidentes
+3,ventas,"Venta directa, upselling y cross-selling"
+4,telemarketing,Campanas salientes y recuperacion comercial
+5,facturacion,"Cobros, pagos, mora y cartera"
