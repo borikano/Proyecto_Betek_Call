@@ -295,3 +295,23 @@ sql/08_preguntas_negocio_dataset_125k.sql
 
 Power BI queda como fase posterior, una vez las respuestas SQL estén validadas.
 <!-- estado-postgresql-125k-fin -->
+
+<!-- flujo-sql-python-powerbi-inicio -->
+## Flujo De Trabajo Analítico
+
+El proyecto sigue un flujo analítico documentado para asegurar trazabilidad antes de construir el reporte final en Power BI.
+
+Flujo definido:
+
+```text
+PostgreSQL -> Consultas SQL -> Python con evidencias CSV/PNG -> Power BI
+```
+
+Guía de referencia:
+
+```text
+docs/flujo_sql_python_powerbi.md
+```
+
+Regla principal: antes de construir visualizaciones finales en Power BI, cada pregunta de negocio debe contar con consulta SQL validada, resultado procesado en Python y gráfico generado como evidencia analítica.
+<!-- flujo-sql-python-powerbi-fin -->
