@@ -181,3 +181,31 @@ Se puede avanzar a Power BI cuando existan:
 ## Nota
 
 Este flujo busca que el reporte final en Power BI no sea solo visual, sino respaldado por consultas SQL, resultados reproducibles y evidencia gráfica previa.
+
+<!-- fase-python-evidencias-inicio -->
+## Fase Python: Evidencias Analíticas
+
+La fase Python queda completada con un script reproducible que consulta PostgreSQL y genera evidencia tabular y visual para las preguntas de negocio.
+
+Archivo ejecutable:
+
+- `scripts/analizar_preguntas_negocio_125k.py`
+
+Directorio de resultados:
+
+- `outputs/evidencias_preguntas_negocio_125k/`
+
+Entregables generados:
+
+- 9 archivos CSV, uno por pregunta de negocio.
+- 9 gráficos PNG, uno por pregunta de negocio.
+- Gráficos con títulos, ejes y leyendas en español.
+- Evidencia previa para validar criterios antes de construir Power BI.
+
+Regla de trazabilidad:
+
+- SQL validado -> Python con CSV/PNG -> Power BI
+
+La siguiente fase consiste en cargar el modelo en Power BI desde PostgreSQL, crear relaciones, medidas DAX y páginas del reporte.
+<!-- fase-python-evidencias-fin -->
+
