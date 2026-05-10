@@ -315,3 +315,27 @@ docs/flujo_sql_python_powerbi.md
 
 Regla principal: antes de construir visualizaciones finales en Power BI, cada pregunta de negocio debe contar con consulta SQL validada, resultado procesado en Python y gráfico generado como evidencia analítica.
 <!-- flujo-sql-python-powerbi-fin -->
+
+<!-- evidencias-python-125k-inicio -->
+## Evidencias Analíticas En Python
+
+La fase de evidencias en Python ya fue construida y versionada antes de iniciar el reporte en Power BI.
+
+Archivo principal:
+
+- `scripts/analizar_preguntas_negocio_125k.py`
+
+Salida generada:
+
+- `outputs/evidencias_preguntas_negocio_125k/`
+
+Contenido generado:
+
+- 9 archivos CSV con resultados tabulares para las preguntas de negocio.
+- 9 archivos PNG con gráficos de evidencia analítica.
+- Gráficas con títulos, ejes y leyendas revisadas.
+- Resultados generados desde PostgreSQL usando la base `betek_call_analytics`.
+
+Esta fase permite validar los resultados antes de construir el modelo semántico y los dashboards en Power BI.
+<!-- evidencias-python-125k-fin -->
+
