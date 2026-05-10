@@ -1,322 +1,148 @@
-# Proyecto Betek Call Center Analytics
+# Betek Call Center Analytics
 
-Repositorio de datos sinteticos para un escenario de analitica de call center con carga a PostgreSQL, analisis en Python y visualizacion en Power BI.
+Proyecto analítico orientado a construir un flujo completo de datos para un caso de negocio de call center: generación de datos sintéticos, carga en PostgreSQL, validación SQL, análisis en Python y preparación del reporte final en Power BI.
 
-## Estado Actual
+El objetivo principal es mantener trazabilidad técnica y analítica en cada fase del proyecto, evitando pasos manuales no documentados y dejando evidencia clara de qué se hizo, por qué se hizo y qué componentes fueron afectados.
 
-Version de referencia del proyecto:
+## Estado Actual Del Proyecto
 
-    v1.0.0-125k
+El proyecto ya cuenta con las siguientes fases completadas:
 
-Esta version incluye:
+- Dataset sintético ampliado a 125.000 clientes.
+- Carga exitosa en PostgreSQL sobre la base `betek_call_analytics`.
+- Validaciones técnicas en SQL para integridad, rangos de fechas, duplicados y consistencia entre tablas.
+- Consultas SQL para responder las preguntas iniciales de negocio.
+- Evidencias analíticas en Python con resultados tabulares y gráficos.
+- Documentación del flujo `SQL -> Python -> Power BI`.
 
-- estructura reorganizada del repositorio;
-- generador Python unificado;
-- dataset base inicial;
-- dataset ampliado de 125.000 clientes;
-- rango historico desde `2025-06-01` hasta `2026-05-26`;
-- validaciones reforzadas de calidad;
-- reglas operativas por tipo de servicio;
-- script reproducible para generar el dataset ampliado;
-- documentacion preparada para VSCode, GitHub, PostgreSQL y Power BI.
+La siguiente fase del proyecto es construir el modelo y el reporte en Power BI.
 
-## Proposito
+## Estructura Actual Del Repositorio
 
-Este proyecto fue preparado para practicar y demostrar:
-
-- modelado relacional aplicado a una operacion de contact center;
-- generacion reproducible de datos sinteticos;
-- carga de datos en PostgreSQL;
-- validacion de calidad e integridad;
-- analisis exploratorio con SQL, Python y BI;
-- construccion de indicadores sobre llamadas, casos, clientes, agentes, facturacion, pagos y satisfaccion.
-
-## Estructura Del Proyecto
-
-La estructura actual del repositorio es:
-
-    PROYECTO_MAESTRO/
-    ├─ data/
-    │  ├─ README.md
-    │  ├─ _smoke_test_call_center/
-    │  ├─ call_center_analytics_20260410/
-    │  └─ call_center_analytics_20260526_125k/
-    ├─ docs/
-    │  ├─ Documentos_Maestros/
-    │  └─ 07_guia_generador_datos.md
-    ├─ scripts/
-    │  └─ generar_dataset_125k.ps1
-    ├─ sql/
-    │  └─ 06_ddl_sql_creacion_tablas.sql
-    ├─ src/
-    │  └─ generador_datos_sinteticos_call_center.py
-    ├─ tests/
-    ├─ README.md
-    ├─ requirements.txt
-    ├─ .gitignore
-    └─ .gitattributes
+- `README.md`: documentación principal del proyecto.
+- `requirements.txt`: dependencias base del entorno Python.
+- `.gitignore`: reglas de exclusión del repositorio.
+- `.gitattributes`: reglas de normalización de archivos.
+- `data/`: datasets generados y documentación de datos.
+- `docs/`: documentación técnica y de trazabilidad.
+- `sql/`: validaciones SQL y consultas de negocio.
+- `scripts/`: scripts auxiliares de generación, análisis y automatización.
+- `src/`: código fuente principal del generador de datos sintéticos.
+- `outputs/`: evidencias analíticas generadas desde Python.
+- `tests/`: espacio reservado para pruebas del proyecto.
 
 ## Carpetas Principales
 
-- `data/`: datasets generados y dataset reducido de prueba.
-- `docs/`: documentacion funcional, tecnica y guia del generador.
-- `scripts/`: comandos auxiliares para generacion de datasets.
-- `sql/`: DDL oficial de creacion de tablas en PostgreSQL.
-- `src/`: codigo Python del generador de datos sinteticos.
-- `tests/`: espacio reservado para pruebas automaticas y validaciones futuras.
+### `data/`
 
-## Modelo De Datos
+Contiene los datasets generados y sus archivos asociados.
 
-El modelo SQL oficial se encuentra en:
+Datasets relevantes:
 
-    sql/06_ddl_sql_creacion_tablas.sql
+- `data/_smoke_test_call_center/`: dataset pequeño usado para pruebas iniciales.
+- `data/call_center_analytics_20260410/`: versión previa del dataset.
+- `data/call_center_analytics_20260526_125k/`: dataset ampliado y utilizado en la fase actual.
 
-El modelo actual se mantiene estable. En esta fase no se agregan ni se eliminan tablas.
+También contiene `data/README.md`, donde se documenta el uso de los datasets y la forma correcta de ejecutar cargas desde la carpeta `data/`.
 
-Entidades principales:
+### `docs/`
+
+Contiene documentación técnica y de trazabilidad del proyecto.
+
+Documentos principales:
+
+- `docs/guia_versionamiento.md`: reglas de versionamiento, nombres de ramas, commits y Pull Requests.
+- `docs/flujo_sql_python_powerbi.md`: flujo de trabajo desde PostgreSQL hasta Power BI.
+
+### `sql/`
+
+Contiene consultas SQL versionadas para validación y análisis.
+
+Archivos principales:
+
+- `sql/07_validaciones_postgresql_dataset_125k.sql`: validaciones técnicas del dataset cargado en PostgreSQL.
+- `sql/08_preguntas_negocio_dataset_125k.sql`: consultas SQL iniciales para responder preguntas de negocio.
+
+### `scripts/`
+
+Contiene scripts ejecutables desde terminal.
+
+Archivos principales:
+
+- `scripts/generar_dataset_125k.ps1`: script auxiliar para generación del dataset ampliado.
+- `scripts/analizar_preguntas_negocio_125k.py`: script Python que consulta PostgreSQL y genera evidencias analíticas.
+
+### `src/`
+
+Contiene el código fuente principal del generador de datos sintéticos.
+
+Archivo principal:
+
+- `src/generador_datos_sinteticos_call_center.py`
+
+### `outputs/`
+
+Contiene resultados generados por procesos analíticos.
+
+Directorio principal:
+
+- `outputs/evidencias_preguntas_negocio_125k/`
+
+Este directorio contiene:
+
+- 9 archivos CSV con resultados tabulares.
+- 9 archivos PNG con gráficos de evidencia.
+
+## Flujo De Trabajo Analítico
+
+El flujo actual del proyecto es:
+
+1. Generar o preparar dataset sintético.
+2. Cargar datos en PostgreSQL.
+3. Validar integridad y consistencia con SQL.
+4. Construir consultas SQL para preguntas de negocio.
+5. Ejecutar análisis en Python.
+6. Generar evidencias CSV y PNG.
+7. Construir modelo y dashboard en Power BI.
+
+Regla de trazabilidad:
+
+- `SQL validado -> Python con CSV/PNG -> Power BI`
+
+## Base De Datos PostgreSQL
+
+Base utilizada:
+
+- `betek_call_analytics`
+
+Esquema principal:
+
+- `call_center_analytics`
+
+Tablas principales:
 
 - `clientes`
 - `agentes`
-- `casos`
+- `departamentos`
+- `tipos_servicio`
+- `motivos_llamada`
+- `resultados_llamada`
 - `llamadas`
+- `casos`
 - `facturas`
 - `pagos`
-
-Tablas de soporte y catalogo:
-
-- `departamentos`
-- `equipos_trabajo`
-- `habilidades`
-- `turnos`
-- `tipos_servicio`
-- `resultados_llamada`
-
-Relaciones y tablas derivadas:
-
-- `agente_habilidad`
-- `agente_turno`
-- `motivos_llamada`
-- `productos_servicios_cliente`
 - `encuestas_satisfaccion`
 
-## Generador Python
+Conteos de referencia validados:
 
-El generador principal se encuentra en:
-
-    src/generador_datos_sinteticos_call_center.py
-
-Uso base:
-
-    python .\src\generador_datos_sinteticos_call_center.py --output-dir .\data\salida_prueba
-
-El generador produce:
-
-- un archivo `.csv` por tabla;
-- `load_call_center_postgresql.sql`;
-- `quality_report.json`;
-- `generation_log.json`;
-- `row_counts.csv`.
-
-## Script Dataset 125k
-
-El script de generacion del dataset ampliado se encuentra en:
-
-    scripts/generar_dataset_125k.ps1
-
-Ejecutar desde la carpeta `data/` del repositorio:
-
-    .\scripts\generar_dataset_125k.ps1
-
-## Datasets Disponibles
-
-El detalle de los datasets se encuentra en:
-
-    data/README.md
-
-Resumen:
-
-- `data/_smoke_test_call_center/`: dataset reducido para pruebas rapidas.
-- `data/call_center_analytics_20260410/`: dataset base inicial.
-- `data/call_center_analytics_20260526_125k/`: dataset ampliado de 125.000 clientes.
-
-## Dataset 125k
-
-El dataset ampliado tiene los siguientes conteos principales:
-
-- `clientes`: 125000
+- `clientes`: 125.000
 - `agentes`: 750
-- `llamadas`: 628679
-- `casos`: 122211
-- `facturas`: 1039992
-- `pagos`: 778227
-- `encuestas_satisfaccion`: 144356
+- `casos`: 122.211
+- `llamadas`: 628.679
+- `facturas`: 1.039.992
+- `pagos`: 778.227
+- `encuestas_satisfaccion`: 144.356
 
-Validaciones realizadas:
-
-- sin validaciones fallidas en `quality_report.json`;
-- sin archivos mayores a 95 MB;
-- sin acentos ni `ñ` en los CSV exportados;
-- fechas dentro del rango historico definido;
-- reglas horarias aplicadas por tipo de servicio.
-
-## Reglas Operativas Aplicadas
-
-- Ventas y telemarketing: lunes a sabado, de 09:00 a 19:00.
-- Soporte tecnico: operacion 24/7.
-- Atencion al cliente: todos los dias, de 07:00 a 21:00.
-- Facturacion: lunes a sabado, en horario operativo definido para el proyecto.
-
-## Como Cargar Los Datos En PostgreSQL
-
-El script de carga ejecuta el siguiente flujo:
-
-1. `TRUNCATE` de tablas destino.
-2. Creacion de tablas temporales de staging.
-3. Carga de CSV con `\copy`.
-4. Insercion en el esquema `call_center_analytics`.
-5. Ajuste de secuencias con `setval`.
-
-### Requisitos
-
-- PostgreSQL 15+.
-- Esquema `call_center_analytics` creado previamente.
-- Permisos para `TRUNCATE`, `COPY` e `INSERT`.
-
-### Cargar Dataset 125k
-
-Ejecutar desde la carpeta `data/` del repositorio:
-
-    psql -d <tu_base_de_datos> -f .\call_center_analytics_20260526_125k\load_call_center_postgresql.sql
-
-### Cargar Dataset Base
-
-    psql -d <tu_base_de_datos> -f .\call_center_analytics_20260410\load_call_center_postgresql.sql
-
-### Cargar Dataset De Prueba
-
-    psql -d <tu_base_de_datos> -f .\_smoke_test_call_center\load_call_center_postgresql.sql
-
-## Entorno Python
-
-Crear entorno virtual:
-
-    python -m venv .venv
-    .\.venv\Scripts\Activate.ps1
-
-Instalar dependencias:
-
-    pip install -r requirements.txt
-
-Dependencias principales:
-
-- NumPy
-- Pandas
-
-## Buenas Practicas Del Repositorio
-
-El repositorio excluye:
-
-- entornos virtuales `.venv/`;
-- archivos `__pycache__/`;
-- archivos `desktop.ini`;
-- archivos temporales;
-- archivos `.fixed.csv*`;
-- artefactos locales del sistema operativo.
-
-La configuracion esta definida en:
-
-- `.gitignore`
-- `.gitattributes`
-- `requirements.txt`
-
-## Nota Sobre Portabilidad
-
-Los loaders usan rutas relativas al repositorio. Esto permite clonar el proyecto y ejecutar los scripts desde otra maquina, siempre que se lancen desde la raiz del repositorio.
-
-## Proximas Fases
-
-1. Crear la base de datos en PostgreSQL.
-2. Ejecutar el DDL oficial desde `sql/06_ddl_sql_creacion_tablas.sql`.
-3. Cargar el dataset ampliado `data/call_center_analytics_20260526_125k/`.
-4. Validar integridad, conteos y reglas desde PostgreSQL.
-5. Conectar Power BI al modelo relacional.
-6. Construir modelo semantico, medidas DAX y dashboards.
-
-
-<!-- estado-postgresql-125k-inicio -->
-## Estado Actual: PostgreSQL y Dataset 125k
-
-El proyecto ya cuenta con el dataset ampliado cargado y validado en PostgreSQL.
-
-Versión de referencia:
-
-```text
-v1.0.0-125k
-```
-
-Componentes principales de esta fase:
-
-- Dataset ampliado de 125.000 clientes en `data/call_center_analytics_20260526_125k/`.
-- Carga exitosa en PostgreSQL sobre la base `betek_call_analytics`.
-- Validaciones técnicas versionadas en `sql/07_validaciones_postgresql_dataset_125k.sql`.
-- Corrección de correos duplicados en clientes para cumplir la restricción única por `lower(email)`.
-- Confirmación de conteos principales, rango histórico, cobertura diaria e integridad básica.
-- Documentación de trazabilidad en `docs/guia_versionamiento.md`.
-
-Conteos principales validados en PostgreSQL:
-
-```text
-clientes                  125000
-agentes                   750
-casos                     122211
-llamadas                  628679
-facturas                  1039992
-pagos                     778227
-encuestas_satisfaccion    144356
-```
-
-Preguntas de negocio pendientes de responder inicialmente en SQL:
-
-1. ¿Cuáles son los motivos de llamadas más frecuentes?
-2. ¿Cuántas llamadas entrantes y salientes se registran por mes?
-3. ¿Cuáles son los motivos de llamadas más frecuentes y cuál es el tiempo promedio de atención para cada solicitud?
-4. ¿En qué franjas horarias y días de la semana se concentra la mayor cantidad de llamadas?
-5. ¿Cuántos clientes realizaron múltiples llamadas por un mismo caso por mes, debido a que no fue resuelto en el primer contacto?
-6. ¿Qué agentes presentan mayor desempeño según cantidad de llamadas atendidas, tiempo promedio de atención y satisfacción del cliente?
-7. ¿Qué clientes presentan facturas vencidas o pagos pendientes?
-8. ¿Qué departamento presenta mayor tiempo promedio de atención o menor tasa de resolución?
-9. ¿Cuál es el nivel de satisfacción del cliente después de la atención y cómo varía según el agente o el tipo de servicio?
-
-Archivo recomendado para la siguiente fase:
-
-```text
-sql/08_preguntas_negocio_dataset_125k.sql
-```
-
-Power BI queda como fase posterior, una vez las respuestas SQL estén validadas.
-<!-- estado-postgresql-125k-fin -->
-
-<!-- flujo-sql-python-powerbi-inicio -->
-## Flujo De Trabajo Analítico
-
-El proyecto sigue un flujo analítico documentado para asegurar trazabilidad antes de construir el reporte final en Power BI.
-
-Flujo definido:
-
-```text
-PostgreSQL -> Consultas SQL -> Python con evidencias CSV/PNG -> Power BI
-```
-
-Guía de referencia:
-
-```text
-docs/flujo_sql_python_powerbi.md
-```
-
-Regla principal: antes de construir visualizaciones finales en Power BI, cada pregunta de negocio debe contar con consulta SQL validada, resultado procesado en Python y gráfico generado como evidencia analítica.
-<!-- flujo-sql-python-powerbi-fin -->
-
-<!-- evidencias-python-125k-inicio -->
 ## Evidencias Analíticas En Python
 
 La fase de evidencias en Python ya fue construida y versionada antes de iniciar el reporte en Power BI.
@@ -337,5 +163,55 @@ Contenido generado:
 - Resultados generados desde PostgreSQL usando la base `betek_call_analytics`.
 
 Esta fase permite validar los resultados antes de construir el modelo semántico y los dashboards en Power BI.
-<!-- evidencias-python-125k-fin -->
 
+## Preguntas De Negocio Cubiertas
+
+Las evidencias actuales responden inicialmente a las siguientes preguntas de negocio:
+
+1. Motivos de llamadas más frecuentes.
+2. Llamadas entrantes y salientes por mes.
+3. Motivos frecuentes y tiempo promedio de atención.
+4. Franjas horarias y días con mayor volumen.
+5. Clientes con múltiples llamadas por caso no resuelto en primer contacto.
+6. Desempeño de agentes.
+7. Clientes con facturas vencidas o pagos pendientes.
+8. Departamentos con mayor tiempo promedio o menor tasa de resolución.
+9. Satisfacción por agente y tipo de servicio.
+
+## Convenciones Del Proyecto
+
+Para documentación:
+
+- Se debe usar redacción clara, buena ortografía y acentos.
+- Las descripciones deben explicar qué se hizo, por qué se hizo y qué componentes afecta.
+
+Para código, SQL, CSV, rutas y datos técnicos:
+
+- Se prioriza compatibilidad técnica.
+- Se recomiendan nombres seguros, consistentes y sin caracteres que puedan causar problemas de codificación.
+
+Para versionamiento:
+
+- No se deben crear ramas, commits, Pull Requests o tags con nombres genéricos o descripciones vacías.
+- Cada cambio debe indicar propósito, contexto y validación.
+
+## Próxima Fase: Power BI
+
+La siguiente fase consiste en construir el reporte en Power BI usando PostgreSQL como fuente principal.
+
+Actividades previstas:
+
+- Cargar tablas desde PostgreSQL.
+- Validar relaciones del modelo.
+- Crear tabla calendario.
+- Crear medidas DAX base.
+- Construir páginas del reporte.
+- Comparar resultados del dashboard con las evidencias SQL y Python.
+
+Nombre sugerido para el archivo Power BI:
+
+- `powerbi/betek_call_center_analytics.pbix`
+
+## Nota
+
+Este README representa el estado actual del proyecto después de completar la fase SQL y la fase Python. Power BI se construirá sobre las validaciones y evidencias ya generadas.
